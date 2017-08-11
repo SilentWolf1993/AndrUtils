@@ -15,8 +15,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Process;
 import android.provider.Settings.Secure;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.yhy.utils.provider.AUFileProvider;
 
 import java.io.File;
 import java.util.Iterator;
@@ -158,8 +161,24 @@ public class SystemUtils {
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.fromFile(apk), "application/vnd.android.package-archive");
-        ctx.startActivity(intent);
+//        intent.setDataAndType(Uri.fromFile(apk), "application/vnd.android.package-archive");
+        //为了兼容Android 7.0+，只能结合FileProvider来使用
+        Uri uri = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = AUFileProvider.getUriForFile(ctx, getApplicationId(ctx) + ".provider", apk);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(uri, ctx.getContentResolver().getType(uri));
+        } else {
+            uri = Uri.fromFile(apk);
+            intent.setDataAndType(uri, "application/vnd.android.package-archive");
+        }
+
+        //打开安装器
+        try {
+            ctx.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
