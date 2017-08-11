@@ -22,15 +22,35 @@ public class DateUtils {
         throw new RuntimeException("Can not create instance for class DateUtils");
     }
 
+    /**
+     * 以默认格式格式化时间
+     *
+     * @param millions 毫秒数
+     * @return 时间字符串
+     */
     public static String formatDateTime(long millions) {
         return formatDateTime(millions, FORMAT_ALL);
     }
 
+    /**
+     * 自定义格式化时间
+     *
+     * @param millions 毫秒数
+     * @param pattern  格式
+     * @return 时间字符串
+     */
     public static String formatDateTime(long millions, String pattern) {
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         return format.format(new Date(millions));
     }
 
+    /**
+     * 判断是否是同一天
+     *
+     * @param dateA 第一个时间日期
+     * @param dateB 第二个时间日期
+     * @return 是否是同一天
+     */
     public static boolean isSameDay(Date dateA, Date dateB) {
         Calendar calA = Calendar.getInstance();
         calA.setTime(dateA);
@@ -39,10 +59,23 @@ public class DateUtils {
         return isSameDay(calA, calB);
     }
 
+    /**
+     * 判断是否是同一天
+     *
+     * @param calA 第一个时间日期
+     * @param calB 第二个时间日期
+     * @return 是否是同一天
+     */
     public static boolean isSameDay(Calendar calA, Calendar calB) {
         return calA.get(Calendar.YEAR) == calB.get(Calendar.YEAR) && calA.get(Calendar.MONTH) == calB.get(Calendar.MONTH) && calA.get(Calendar.DAY_OF_MONTH) == calB.get(Calendar.DAY_OF_MONTH);
     }
 
+    /**
+     * 以友好的方式显示时间
+     *
+     * @param date 时间
+     * @return 格式化结果
+     */
     public static String friendlyDate(Date date) {
         if (null == date) {
             return "";
@@ -53,13 +86,26 @@ public class DateUtils {
         return friendlyDate(calA);
     }
 
-    public static String friendlyDate(Calendar date) {
-        if (null == date) {
+    /**
+     * 以友好的方式显示时间
+     *
+     * @param cale 时间
+     * @return 格式化结果
+     */
+    public static String friendlyDate(Calendar cale) {
+        if (null == cale) {
             return "";
         }
-        return friendlyDate(date.getTimeInMillis());
+        return friendlyDate(cale.getTimeInMillis());
     }
 
+
+    /**
+     * 以友好的方式显示时间
+     *
+     * @param millis 毫秒数
+     * @return 格式化结果
+     */
     public static String friendlyDate(long millis) {
         Calendar now = Calendar.getInstance();
         //计算时间差
@@ -103,13 +149,4 @@ public class DateUtils {
         //标准形式显示时间
         return formatDateTime(millis);
     }
-
-//    private static boolean isPrevDay(Calendar date, Calendar now) {
-//        //到当前0点的日期
-//        Calendar temp = Calendar.getInstance();
-//        temp.set(now.get(Calendar.YEAR), now.get(Calendar.MONTH), now.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
-//
-//        //如果参数日期时间减去当前0点时间小于0，说明是前一天的日期
-//        return date.getTimeInMillis() - temp.getTimeInMillis() < 0;
-//    }
 }

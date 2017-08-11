@@ -2,6 +2,7 @@ package com.yhy.utils.core;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Instrumentation;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -28,6 +29,7 @@ public class SystemUtils {
     private static final String TAG = "SystemUtils";
 
     private SystemUtils() {
+        throw new IllegalStateException("Can not instantiate class SystemUtils.");
     }
 
     /**
@@ -47,6 +49,25 @@ public class SystemUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 获取版本号
+     *
+     * @param ctx 上下文对象
+     * @return 版本号
+     */
+    public static int getVersionCode(Context ctx) {
+        PackageManager packageManager = ctx.getPackageManager();
+        try {
+            // 得到apk的功能清单文件:为了防止出错直接使用getPackageName()方法获得包名
+            PackageInfo packageInfo = packageManager.getPackageInfo(ctx.getPackageName(), 0);
+            // 返回版本号
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     /**
@@ -176,12 +197,80 @@ public class SystemUtils {
         List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(1);
         if (list != null && list.size() > 0) {
             ComponentName cpn = list.get(0).topActivity;
-            Log.i(TAG, clazz.getName());
-            Log.i(TAG, cpn.getClassName());
+//            Log.i(TAG, clazz.getName());
+//            Log.i(TAG, cpn.getClassName());
             if (clazz.getName().equals(cpn.getClassName())) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * 获取ApplicationId
+     *
+     * @param ctx 上下文对象
+     * @return ApplicationId
+     */
+    public static String getApplicationId(Context ctx) {
+        ApplicationInfo applicationInfo = null;
+        try {
+            applicationInfo = ctx.getPackageManager().getApplicationInfo(ctx.getPackageName(), PackageManager.GET_META_DATA);
+            if (applicationInfo == null) {
+                throw new IllegalArgumentException("get application info = null, has no meta data! ");
+            }
+            return applicationInfo.metaData.getString("APP_ID");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+
+    /**
+     * 返回当前的应用是否处于前台显示状态
+     *
+     * @param ctx         上下文对象
+     * @param packageName 包名
+     * @return 是否处于前台运行
+     */
+    public static boolean isTopProcess(Context ctx, String packageName) {
+        ActivityManager am = (ActivityManager) ctx.getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> list = am.getRunningAppProcesses();
+        if (list.size() == 0) return false;
+        for (ActivityManager.RunningAppProcessInfo process : list) {
+//            Log.d("isTopActivity", Integer.toString(process.importance));
+//            Log.d("isTopActivity", process.processName);
+            /*
+            在6.0/7.0等新版本中 可能还有另外几种状态:
+            1.RunningAppProcessInfo.IMPORTANCE_TOP_SLEEPING(应用在前台时锁屏幕)，RunningAppProcessInfo.IMPORTANCE_FOREGROUND_SERVICE(应用开启了服务,然后锁屏幕,此时服务还是在前台运行)
+            可以根据自己的实际情况决定上面列出的2个状态,是否算作前台状态;
+             */
+            if (process.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && process.processName.equals(packageName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 模拟键盘点击事件
+     *
+     * @param keyCode keyCode
+     */
+    public static void sendKeyCode(final int keyCode) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // 创建一个Instrumentation对象
+                    Instrumentation inst = new Instrumentation();
+                    // 调用inst对象的按键模拟方法
+                    inst.sendKeyDownUpSync(keyCode);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }
