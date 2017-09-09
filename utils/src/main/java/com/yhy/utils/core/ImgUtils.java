@@ -59,7 +59,7 @@ public class ImgUtils {
          * @param ctx   上下文对象
          * @param model 数据源
          * @param <T>   数据源类型
-         * @return
+         * @return 获取到的图片
          */
         public <T> Bitmap get(Context ctx, T model) {
             return null;
