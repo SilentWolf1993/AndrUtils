@@ -1,6 +1,7 @@
 package com.yhy.utils.core;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.annotation.IdRes;
 import android.widget.ImageView;
 
@@ -41,7 +42,27 @@ public class ImgUtils {
     /**
      * 图片加载器
      */
-    public interface ImgLoader {
-        <T> void load(Context ctx, ImageView iv, T model);
+    public static abstract class ImgLoader {
+        /**
+         * 加载图片
+         *
+         * @param ctx   上下文对象
+         * @param iv    图片控件
+         * @param model 数据源
+         * @param <T>   数据源类型
+         */
+        public abstract <T> void load(Context ctx, ImageView iv, T model);
+
+        /**
+         * 根据数据源获取到bitmap对象
+         *
+         * @param ctx   上下文对象
+         * @param model 数据源
+         * @param <T>   数据源类型
+         * @return
+         */
+        public <T> Bitmap get(Context ctx, T model) {
+            return null;
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.yhy.utils.core;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Instrumentation;
@@ -15,6 +16,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Process;
 import android.provider.Settings.Secure;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
@@ -179,6 +181,20 @@ public class SystemUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 拨打电话
+     *
+     * @param ctx   上下文对象
+     * @param phone 电话号码
+     */
+    public static void callPhone(Context ctx, String phone) {
+        if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
+        ctx.startActivity(intent);
     }
 
     /**

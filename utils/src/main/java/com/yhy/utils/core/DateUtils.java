@@ -1,5 +1,6 @@
 package com.yhy.utils.core;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -42,6 +43,33 @@ public class DateUtils {
     public static String formatDateTime(long millions, String pattern) {
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         return format.format(new Date(millions));
+    }
+
+    /**
+     * 解析字符串类型的日期
+     *
+     * @param dateStr 日期字符串
+     * @return 毫秒值
+     */
+    public static long parseDateTime(String dateStr) {
+        return parseDateTime(dateStr, FORMAT_ALL);
+    }
+
+    /**
+     * 解析字符串类型的日期
+     *
+     * @param dateStr 日期字符串
+     * @param pattern 格式
+     * @return 毫秒值
+     */
+    public static long parseDateTime(String dateStr, String pattern) {
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        try {
+            return format.parse(dateStr).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     /**
