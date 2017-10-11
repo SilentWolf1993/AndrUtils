@@ -1,7 +1,6 @@
 package com.yhy.utils.core;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Instrumentation;
 import android.content.ComponentName;
@@ -17,9 +16,6 @@ import android.os.Build;
 import android.os.Process;
 import android.provider.Settings.Secure;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.FileProvider;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.yhy.utils.provider.AUFileProvider;
 
@@ -32,18 +28,27 @@ import java.util.List;
  */
 public class SystemUtils {
     private static final String TAG = "SystemUtils";
+    private static Context ctx;
 
     private SystemUtils() {
         throw new IllegalStateException("Can not instantiate class SystemUtils.");
     }
 
     /**
+     * 初始化
+     *
+     * @param context 上下文对象
+     */
+    public static void init(Context context) {
+        ctx = context;
+    }
+
+    /**
      * 获取版本名称
      *
-     * @param ctx 上下文对象
      * @return 版本名称
      */
-    public static String getVersionName(Context ctx) {
+    public static String getVersionName() {
         PackageManager packageManager = ctx.getPackageManager();
         try {
             // 得到apk的功能清单文件:为了防止出错直接使用getPackageName()方法获得包名
@@ -59,10 +64,9 @@ public class SystemUtils {
     /**
      * 获取版本号
      *
-     * @param ctx 上下文对象
      * @return 版本号
      */
-    public static int getVersionCode(Context ctx) {
+    public static int getVersionCode() {
         PackageManager packageManager = ctx.getPackageManager();
         try {
             // 得到apk的功能清单文件:为了防止出错直接使用getPackageName()方法获得包名
@@ -78,10 +82,9 @@ public class SystemUtils {
     /**
      * 获取设备号
      *
-     * @param ctx 上下文对象
      * @return 设备号
      */
-    public static String getDeviceId(Context ctx) {
+    public static String getDeviceId() {
         // TelephonyManager tm = (TelephonyManager)
         // ctx.getSystemService(Context.TELEPHONY_SERVICE);
         // return tm.getDeviceId();
@@ -92,10 +95,9 @@ public class SystemUtils {
     /**
      * 获取当前APP的名称
      *
-     * @param ctx 上下文对象
      * @return 当前APP的名称
      */
-    public static String getAppName(Context ctx) {
+    public static String getAppName() {
         PackageManager pm = ctx.getPackageManager();
         ApplicationInfo ai = null;
         try {
@@ -119,10 +121,9 @@ public class SystemUtils {
     /**
      * 获取进程名称
      *
-     * @param ctx 上下文对象
      * @return 进程名称
      */
-    public static String getProcessName(Context ctx) {
+    public static String getProcessName() {
         int pid = getProcessId();
         String processName = null;
         ActivityManager am = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
@@ -146,20 +147,18 @@ public class SystemUtils {
     /**
      * 获取设备类型
      *
-     * @param ctx 上下文对象
      * @return 设备类型
      */
-    public static String getDeviceType(Context ctx) {
+    public static String getDeviceType() {
         return Build.MODEL;
     }
 
     /**
      * 安装apk
      *
-     * @param ctx 上下文对象
      * @param apk apk文件
      */
-    public static void installApk(Context ctx, File apk) {
+    public static void installApk(File apk) {
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Intent.ACTION_VIEW);
@@ -167,7 +166,7 @@ public class SystemUtils {
         //为了兼容Android 7.0+，只能结合FileProvider来使用
         Uri uri = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = AUFileProvider.getUriForFile(ctx, getApplicationId(ctx) + ".provider", apk);
+            uri = AUFileProvider.getUriForFile(ctx, getApplicationId() + ".provider", apk);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.setDataAndType(uri, ctx.getContentResolver().getType(uri));
         } else {
@@ -186,10 +185,9 @@ public class SystemUtils {
     /**
      * 拨打电话
      *
-     * @param ctx   上下文对象
      * @param phone 电话号码
      */
-    public static void callPhone(Context ctx, String phone) {
+    public static void callPhone(String phone) {
         if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
@@ -200,11 +198,10 @@ public class SystemUtils {
     /**
      * 判断是否注册过广播
      *
-     * @param ctx    上下文
      * @param action 广播Action
      * @return 是否注册过
      */
-    public static boolean isReceiverRegisted(Context ctx, String action) {
+    public static boolean isReceiverRegisted(String action) {
         Intent intent = new Intent();
         intent.setAction(action);
         PackageManager pm = ctx.getPackageManager();
@@ -219,21 +216,18 @@ public class SystemUtils {
     /**
      * 判断某个Activity是否在前台
      *
-     * @param context 上下文对象
-     * @param clazz   Activity字节码对象
+     * @param clazz Activity字节码对象
      * @return 是否在前台
      */
-    public static boolean isForeground(Context context, Class<?> clazz) {
-        if (context == null || null == clazz) {
+    public static boolean isForeground(Class<?> clazz) {
+        if (null == clazz) {
             return false;
         }
 
-        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager am = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(1);
         if (list != null && list.size() > 0) {
             ComponentName cpn = list.get(0).topActivity;
-//            Log.i(TAG, clazz.getName());
-//            Log.i(TAG, cpn.getClassName());
             if (clazz.getName().equals(cpn.getClassName())) {
                 return true;
             }
@@ -244,10 +238,9 @@ public class SystemUtils {
     /**
      * 获取ApplicationId
      *
-     * @param ctx 上下文对象
      * @return ApplicationId
      */
-    public static String getApplicationId(Context ctx) {
+    public static String getApplicationId() {
         ApplicationInfo applicationInfo = null;
         try {
             applicationInfo = ctx.getPackageManager().getApplicationInfo(ctx.getPackageName(), PackageManager.GET_META_DATA);
@@ -261,21 +254,17 @@ public class SystemUtils {
         return "";
     }
 
-
     /**
      * 返回当前的应用是否处于前台显示状态
      *
-     * @param ctx         上下文对象
      * @param packageName 包名
      * @return 是否处于前台运行
      */
-    public static boolean isTopProcess(Context ctx, String packageName) {
+    public static boolean isTopProcess(String packageName) {
         ActivityManager am = (ActivityManager) ctx.getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningAppProcessInfo> list = am.getRunningAppProcesses();
         if (list.size() == 0) return false;
         for (ActivityManager.RunningAppProcessInfo process : list) {
-//            Log.d("isTopActivity", Integer.toString(process.importance));
-//            Log.d("isTopActivity", process.processName);
             /*
             在6.0/7.0等新版本中 可能还有另外几种状态:
             1.RunningAppProcessInfo.IMPORTANCE_TOP_SLEEPING(应用在前台时锁屏幕)，RunningAppProcessInfo.IMPORTANCE_FOREGROUND_SERVICE(应用开启了服务,然后锁屏幕,此时服务还是在前台运行)

@@ -10,7 +10,7 @@ import android.widget.ImageView;
  */
 public class ImgUtils {
 
-    private static ImgLoader mLoader;
+    private static AndrUtils.ImgLoader imgLoader;
 
     private ImgUtils() {
         throw new RuntimeException("Can not instantiate ImgUtils.");
@@ -21,8 +21,8 @@ public class ImgUtils {
      *
      * @param loader 图片加载器
      */
-    public static void init(ImgLoader loader) {
-        mLoader = loader;
+    public static void init(AndrUtils.ImgLoader loader) {
+        imgLoader = loader;
     }
 
     /**
@@ -33,36 +33,9 @@ public class ImgUtils {
      * @param <T>   图片地址
      */
     public static <T> void load(ImageView iv, T model) {
-        if (null == mLoader) {
+        if (null == imgLoader) {
             throw new RuntimeException("You must call method init(ImgLoading loader) to initializing in Application.");
         }
-        mLoader.load(iv.getContext(), iv, model);
-    }
-
-    /**
-     * 图片加载器
-     */
-    public static abstract class ImgLoader {
-        /**
-         * 加载图片
-         *
-         * @param ctx   上下文对象
-         * @param iv    图片控件
-         * @param model 数据源
-         * @param <T>   数据源类型
-         */
-        public abstract <T> void load(Context ctx, ImageView iv, T model);
-
-        /**
-         * 根据数据源获取到bitmap对象
-         *
-         * @param ctx   上下文对象
-         * @param model 数据源
-         * @param <T>   数据源类型
-         * @return 获取到的图片
-         */
-        public <T> Bitmap get(Context ctx, T model) {
-            return null;
-        }
+        imgLoader.load(iv.getContext(), iv, model);
     }
 }

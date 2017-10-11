@@ -28,7 +28,7 @@ public class ToastUtils {
      * @param text 提示的内容
      */
     public static void shortToast(CharSequence text) {
-        Toast.makeText(ctx, text, Toast.LENGTH_SHORT).show();
+        toast(false, text);
     }
 
     /**
@@ -37,7 +37,7 @@ public class ToastUtils {
      * @param text 提示的内容
      */
     public static void longToast(CharSequence text) {
-        Toast.makeText(ctx, text, Toast.LENGTH_LONG).show();
+        toast(true, text);
     }
 
     /**
@@ -46,7 +46,7 @@ public class ToastUtils {
      * @param resId 提示的内容资源id
      */
     public static void shortToast(int resId) {
-        Toast.makeText(ctx, ctx.getResources().getString(resId), Toast.LENGTH_SHORT).show();
+        toast(false, ctx.getResources().getString(resId));
     }
 
     /**
@@ -55,6 +55,16 @@ public class ToastUtils {
      * @param resId 提示的内容资源id
      */
     public static void longToast(int resId) {
-        Toast.makeText(ctx, ctx.getResources().getString(resId), Toast.LENGTH_LONG).show();
+        toast(true, ctx.getResources().getString(resId));
+    }
+
+    /**
+     * toast显示
+     *
+     * @param longToast 是否是长提显示
+     * @param text      显示内容
+     */
+    private static void toast(boolean longToast, CharSequence text) {
+        Toast.makeText(ctx, text, longToast ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT).show();
     }
 }
