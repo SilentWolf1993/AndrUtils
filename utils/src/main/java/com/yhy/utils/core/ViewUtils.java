@@ -1,6 +1,8 @@
 package com.yhy.utils.core;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -17,7 +19,7 @@ import java.io.ByteArrayOutputStream;
 public class ViewUtils {
 
     private ViewUtils() {
-        throw new RuntimeException("Can not create instance for class ViewUtils.");
+        throw new UnsupportedOperationException("Can not create instance for class ViewUtils.");
     }
 
     /**
@@ -30,6 +32,53 @@ public class ViewUtils {
             ViewGroup vg = (ViewGroup) view.getParent();
             vg.removeView(view);
         }
+    }
+
+    /**
+     * dp转px
+     *
+     * @param context 上下文对象
+     * @param dpVal   dp值
+     * @return px值
+     */
+    public static int dp2px(Context context, float dpVal) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpVal, context
+                .getResources().getDisplayMetrics());
+    }
+
+    /**
+     * sp转px
+     *
+     * @param context 上下文对象
+     * @param spVal   sp值
+     * @return px值
+     */
+    public static int sp2px(Context context, float spVal) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, spVal, context
+                .getResources().getDisplayMetrics());
+    }
+
+    /**
+     * px转dp
+     *
+     * @param context 上下文对象
+     * @param pxVal   px值
+     * @return dp值
+     */
+    public static float px2dp(Context context, float pxVal) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (pxVal / scale);
+    }
+
+    /**
+     * px转sp
+     *
+     * @param context 上下文对象
+     * @param pxVal   px值
+     * @return sp值
+     */
+    public static float px2sp(Context context, float pxVal) {
+        return (pxVal / context.getResources().getDisplayMetrics().scaledDensity);
     }
 
     /**

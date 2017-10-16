@@ -16,7 +16,7 @@ public class MetaUtils {
     private static Context ctx;
 
     private MetaUtils() {
-        throw new IllegalStateException("Can not instantiate class MetaUtils.");
+        throw new UnsupportedOperationException("Can not instantiate class MetaUtils.");
     }
 
     /**
@@ -44,7 +44,7 @@ public class MetaUtils {
      * @param name 名称
      * @return 值
      */
-    public static String getString(String name) {
+    public static String getString(String name) throws PackageManager.NameNotFoundException {
         return getString(name, "");
     }
 
@@ -55,13 +55,9 @@ public class MetaUtils {
      * @param defValue 默认值
      * @return 值
      */
-    public static String getString(String name, String defValue) {
-        try {
-            return getMeta().getString(name, defValue);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return defValue;
+    public static String getString(String name, String defValue) throws PackageManager.NameNotFoundException {
+        Bundle meta = getMeta();
+        return null == meta ? defValue : meta.getString(name, defValue);
     }
 
     /**
@@ -70,7 +66,7 @@ public class MetaUtils {
      * @param name 名称
      * @return 值
      */
-    public static int getInt(String name) {
+    public static int getInt(String name) throws PackageManager.NameNotFoundException {
         return getInt(name, -1);
     }
 
@@ -81,13 +77,9 @@ public class MetaUtils {
      * @param defValue 默认值
      * @return 值
      */
-    public static int getInt(String name, int defValue) {
-        try {
-            return getMeta().getInt(name, defValue);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return defValue;
+    public static int getInt(String name, int defValue) throws PackageManager.NameNotFoundException {
+        Bundle meta = getMeta();
+        return null == meta ? defValue : meta.getInt(name, defValue);
     }
 
 
@@ -97,12 +89,8 @@ public class MetaUtils {
      * @param name 名称
      * @return 值
      */
-    public static Object get(String name) {
-        try {
-            return getMeta().get(name);
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static Object get(String name) throws PackageManager.NameNotFoundException {
+        Bundle meta = getMeta();
+        return null == meta ? null : meta.get(name);
     }
 }

@@ -10,7 +10,7 @@ public class ToastUtils {
     private static Context ctx;
 
     private ToastUtils() {
-        throw new RuntimeException("Can not create instance for class ToastUtils.");
+        throw new UnsupportedOperationException("Can not create instance for class ToastUtils.");
     }
 
     /**
@@ -27,7 +27,7 @@ public class ToastUtils {
      *
      * @param text 提示的内容
      */
-    public static void shortToast(CharSequence text) {
+    public static void shortT(CharSequence text) {
         toast(false, text);
     }
 
@@ -36,7 +36,7 @@ public class ToastUtils {
      *
      * @param text 提示的内容
      */
-    public static void longToast(CharSequence text) {
+    public static void longT(CharSequence text) {
         toast(true, text);
     }
 
@@ -45,7 +45,7 @@ public class ToastUtils {
      *
      * @param resId 提示的内容资源id
      */
-    public static void shortToast(int resId) {
+    public static void shortT(int resId) {
         toast(false, ctx.getResources().getString(resId));
     }
 
@@ -54,7 +54,7 @@ public class ToastUtils {
      *
      * @param resId 提示的内容资源id
      */
-    public static void longToast(int resId) {
+    public static void longT(int resId) {
         toast(true, ctx.getResources().getString(resId));
     }
 

@@ -6,7 +6,11 @@ import java.util.Calendar;
 import java.util.Date;
 
 /**
- * Created by HongYi Yan on 2017/3/23 11:43.
+ * author : 颜洪毅
+ * e-mail : yhyzgn@gmail.com
+ * time   : 2017-10-16 10:00
+ * version: 1.0.0
+ * desc   : 日期时间工具类
  */
 public class DateUtils {
     public static final String FORMAT_ALL = "yyyy年MM月dd日 HH:mm:ss";
@@ -20,7 +24,7 @@ public class DateUtils {
     private static final long MONTH = 30 * DAY;
 
     private DateUtils() {
-        throw new RuntimeException("Can not create instance for class DateUtils");
+        throw new UnsupportedOperationException("Can not create instance for class DateUtils");
     }
 
     /**

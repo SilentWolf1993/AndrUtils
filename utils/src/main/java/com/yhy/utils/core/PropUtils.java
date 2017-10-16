@@ -21,7 +21,7 @@ public class PropUtils {
     private static Map<Object, Properties> propMap;
 
     private PropUtils() {
-        throw new RuntimeException("Can not create instance for class PropUtils.");
+        throw new UnsupportedOperationException("Can not create instance for class PropUtils.");
     }
 
     /**
@@ -69,8 +69,8 @@ public class PropUtils {
      * @param key 属性名称
      * @return 属性值
      */
-    public static String getValue(Object tag, String key) {
-        return getValue(tag, key, "");
+    public static String get(Object tag, String key) {
+        return get(tag, key, "");
     }
 
     /**
@@ -81,7 +81,7 @@ public class PropUtils {
      * @param defValue 默认值
      * @return 属性值
      */
-    public static String getValue(Object tag, String key, String defValue) {
+    public static String get(Object tag, String key, String defValue) {
         for (Map.Entry<Object, Properties> et : propMap.entrySet()) {
             if (et.getKey() == tag) {
                 return et.getValue().getProperty(key, defValue);

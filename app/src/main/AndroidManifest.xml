@@ -18,7 +18,10 @@
             </intent-filter>
         </activity>
 
-
+        <!--配置api文件-->
+        <meta-data
+            android:name="API_ASSETS"
+            android:value="api_assets_test.properties" />
     </application>
 
 </manifest>

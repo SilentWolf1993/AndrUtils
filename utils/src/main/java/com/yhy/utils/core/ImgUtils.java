@@ -6,14 +6,18 @@ import android.support.annotation.IdRes;
 import android.widget.ImageView;
 
 /**
- * Created by HongYi Yan on 2017/4/6 16:48.
+ * author : 颜洪毅
+ * e-mail : yhyzgn@gmail.com
+ * time   : 2017-10-16 10:01
+ * version: 1.0.0
+ * desc   : 图片工具类
  */
 public class ImgUtils {
 
-    private static AndrUtils.ImgLoader imgLoader;
+    private static ImgLoader imgLoader;
 
     private ImgUtils() {
-        throw new RuntimeException("Can not instantiate ImgUtils.");
+        throw new UnsupportedOperationException("Can not instantiate ImgUtils.");
     }
 
     /**
@@ -21,7 +25,7 @@ public class ImgUtils {
      *
      * @param loader 图片加载器
      */
-    public static void init(AndrUtils.ImgLoader loader) {
+    public static void init(ImgLoader loader) {
         imgLoader = loader;
     }
 
@@ -37,5 +41,20 @@ public class ImgUtils {
             throw new RuntimeException("You must call method init(ImgLoading loader) to initializing in Application.");
         }
         imgLoader.load(iv.getContext(), iv, model);
+    }
+
+    /**
+     * 图片加载器
+     */
+    public interface ImgLoader {
+        /**
+         * 加载图片
+         *
+         * @param ctx   上下文对象
+         * @param iv    图片控件
+         * @param model 数据源
+         * @param <T>   数据源类型
+         */
+        <T> void load(Context ctx, ImageView iv, T model);
     }
 }

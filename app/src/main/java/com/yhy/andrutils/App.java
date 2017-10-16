@@ -4,7 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.widget.ImageView;
 
-import com.yhy.utils.core.AndrUtils;
+import com.yhy.utils.core.ImgUtils;
+import com.yhy.utils.manager.UtilsManager;
 
 /**
  * author : 颜洪毅
@@ -20,14 +21,13 @@ public class App extends Application {
         super.onCreate();
 
         // 初始化工具类
-        AndrUtils.init(this);
-
-        // 初始化图片加载工具类中的加载器
-        AndrUtils.initImgLoader(new AndrUtils.ImgLoader() {
-            @Override
-            public <T> void load(Context ctx, ImageView iv, T model) {
-                // 图片加载方案实现
-            }
-        });
+        UtilsManager.getInstance()
+                .init(this)
+                .initImgLoader(new ImgUtils.ImgLoader() {
+                    @Override
+                    public <T> void load(Context ctx, ImageView iv, T model) {
+                        // ... resolve image loader
+                    }
+                });
     }
 }

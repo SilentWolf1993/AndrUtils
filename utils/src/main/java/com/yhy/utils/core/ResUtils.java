@@ -12,14 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by 颜洪毅 on 2017/8/11 13:25.
+ * author : 颜洪毅
+ * e-mail : yhyzgn@gmail.com
+ * time   : 2017-10-16 10:01
+ * version: 1.0.0
+ * desc   : 资源工具类
  */
 public class ResUtils {
 
     private static Context mCtx;
 
     private ResUtils() {
-        throw new IllegalStateException("Can not instantiate class ResUtils.");
+        throw new UnsupportedOperationException("Can not instantiate class ResUtils.");
     }
 
     /**

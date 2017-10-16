@@ -16,6 +16,8 @@ import android.os.Build;
 import android.os.Process;
 import android.provider.Settings.Secure;
 import android.support.v4.app.ActivityCompat;
+import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 
 import com.yhy.utils.provider.AUFileProvider;
 
@@ -26,12 +28,11 @@ import java.util.List;
 /**
  * 系统工具类
  */
-public class SystemUtils {
-    private static final String TAG = "SystemUtils";
+public class SysUtils {
     private static Context ctx;
 
-    private SystemUtils() {
-        throw new IllegalStateException("Can not instantiate class SystemUtils.");
+    private SysUtils() {
+        throw new UnsupportedOperationException("Can not instantiate class SysUtils.");
     }
 
     /**
@@ -85,11 +86,26 @@ public class SystemUtils {
      * @return 设备号
      */
     public static String getDeviceId() {
-        // TelephonyManager tm = (TelephonyManager)
-        // ctx.getSystemService(Context.TELEPHONY_SERVICE);
-        // return tm.getDeviceId();
-        // 以上方法有时候获取不到
-        return Secure.getString(ctx.getContentResolver(), Secure.ANDROID_ID);
+        if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            return "";
+        }
+
+        TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+        String imei = tm.getDeviceId();// 设备唯一标识 IMEI
+        if (TextUtils.isEmpty(imei)) {
+            imei = tm.getSubscriberId(); // IESI
+        }
+        if (TextUtils.isEmpty(imei)) {
+            // pad标识
+            imei = Secure.getString(ctx.getContentResolver(), Secure.ANDROID_ID);
+        }
+        if (TextUtils.isEmpty(imei)) {
+            imei = tm.getLine1Number();
+        }
+        if (TextUtils.isEmpty(imei)) {
+            imei = "Unknow";
+        }
+        return imei;
     }
 
     /**
@@ -296,5 +312,18 @@ public class SystemUtils {
                 }
             }
         }).start();
+    }
+
+    /**
+     * 获取本机电话号码
+     *
+     * @return 本机电话号码
+     */
+    public static String getPhoneNo() {
+        if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            return "";
+        }
+        TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+        return tm.getLine1Number();
     }
 }
