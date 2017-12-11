@@ -534,6 +534,7 @@ public class ActivityUtils {
      *
      * @param extras    extras
      * @param pkg       包名
+     * @param activity  当前Activity
      * @param cls       全类名
      * @param enterAnim 入场动画
      * @param exitAnim  出场动画
@@ -916,6 +917,7 @@ public class ActivityUtils {
      * @param activity      activity
      * @param isIncludeSelf 是否结束该 activity 自己
      * @param isLoadAnim    是否启动动画
+     * @return 是否结束成功
      */
     public static boolean finishToActivity(@NonNull final Activity activity,
                                            final boolean isIncludeSelf,
@@ -941,6 +943,7 @@ public class ActivityUtils {
      * @param isIncludeSelf 是否结束该 activity 自己
      * @param enterAnim     入场动画
      * @param exitAnim      出场动画
+     * @return 是否结束成功
      */
     public static boolean finishToActivity(@NonNull final Activity activity,
                                            final boolean isIncludeSelf,
@@ -965,6 +968,7 @@ public class ActivityUtils {
      *
      * @param clz           Activity 类
      * @param isIncludeSelf 是否结束该 activity 自己
+     * @return 是否结束成功
      */
     public static boolean finishToActivity(@NonNull final Class<?> clz,
                                            final boolean isIncludeSelf) {
@@ -977,6 +981,7 @@ public class ActivityUtils {
      * @param clz           Activity 类
      * @param isIncludeSelf 是否结束该 activity 自己
      * @param isLoadAnim    是否启动动画
+     * @return 是否结束成功
      */
     public static boolean finishToActivity(@NonNull final Class<?> clz,
                                            final boolean isIncludeSelf,
@@ -1002,6 +1007,7 @@ public class ActivityUtils {
      * @param isIncludeSelf 是否结束该 activity 自己
      * @param enterAnim     入场动画
      * @param exitAnim      出场动画
+     * @return 是否结束成功
      */
     public static boolean finishToActivity(@NonNull final Class<?> clz,
                                            final boolean isIncludeSelf,

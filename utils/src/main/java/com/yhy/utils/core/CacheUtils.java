@@ -459,6 +459,7 @@ public class CacheUtils {
      *
      * @param key     键
      * @param creator 建造器
+     * @param <T>     具体的类型
      * @return 存在且没过期返回对应值，否则返回{@code null}
      */
     public <T> T getParcelable(@NonNull String key, @NonNull Parcelable.Creator<T> creator) {
@@ -471,6 +472,7 @@ public class CacheUtils {
      * @param key          键
      * @param creator      建造器
      * @param defaultValue 默认值
+     * @param <T>     具体的类型
      * @return 存在且没过期返回对应值，否则返回默认值{@code defaultValue}
      */
     public <T> T getParcelable(@NonNull String key, @NonNull Parcelable.Creator<T> creator, T defaultValue) {

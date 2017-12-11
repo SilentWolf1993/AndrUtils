@@ -572,12 +572,12 @@ public class EncryptUtils {
 
     /**
      * DES转变
-     * <p>
-     * <p>法算法名称/加密模式/填充方式</p>
-     * <p>
-     * <p>加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB</p>
-     * <p>
-     * <p>填充方式有：NoPadding、ZerosPadding、PKCS5Padding</p>
+     *
+     * 法算法名称/加密模式/填充方式
+     *
+     * 加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB
+     *
+     * 填充方式有：NoPadding、ZerosPadding、PKCS5Padding
      */
     public static String DES_Transformation = "DES/ECB/NoPadding";
     private static final String DES_Algorithm = "DES";
@@ -650,12 +650,12 @@ public class EncryptUtils {
 
     /**
      * 3DES转变
-     * <p>
-     * <p>法算法名称/加密模式/填充方式</p>
-     * <p>
-     * <p>加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB</p>
-     * <p>
-     * <p>填充方式有：NoPadding、ZerosPadding、PKCS5Padding</p>
+     *
+     * 法算法名称/加密模式/填充方式
+     *
+     * 加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB
+     *
+     * 填充方式有：NoPadding、ZerosPadding、PKCS5Padding
      */
     public static String TripleDES_Transformation = "DESede/ECB/NoPadding";
     private static final String TripleDES_Algorithm = "DESede";
@@ -729,11 +729,11 @@ public class EncryptUtils {
     /**
      * AES转变
      * <p>
-     * <p>法算法名称/加密模式/填充方式</p>
+     * 法算法名称/加密模式/填充方式
      * <p>
-     * <p>加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB</p>
+     * 加密模式有：电子密码本模式ECB、加密块链模式CBC、加密反馈模式CFB、输出反馈模式OFB
      * <p>
-     * <p>填充方式有：NoPadding、ZerosPadding、PKCS5Padding</p>
+     * 填充方式有：NoPadding、ZerosPadding、PKCS5Padding
      */
     public static String AES_Transformation = "AES/ECB/NoPadding";
     private static final String AES_Algorithm = "AES";

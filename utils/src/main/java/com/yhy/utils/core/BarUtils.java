@@ -147,6 +147,7 @@ public class BarUtils {
      * 设置状态栏透明度
      *
      * @param activity activity
+     * @param alpha    透明度
      */
     public static void setStatusBarAlpha(@NonNull final Activity activity,
                                          @IntRange(from = 0, to = 255) final int alpha) {

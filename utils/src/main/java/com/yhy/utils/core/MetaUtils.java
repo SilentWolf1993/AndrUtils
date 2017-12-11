@@ -34,6 +34,7 @@ public class MetaUtils {
      * 获取meta参数
      *
      * @return meta参数
+     * @throws PackageManager.NameNotFoundException 找不到参数
      */
     public static Bundle getMeta() throws PackageManager.NameNotFoundException {
         ApplicationInfo ai = ctx.getPackageManager().getApplicationInfo(ctx.getPackageName(), PackageManager.GET_META_DATA);
@@ -45,6 +46,7 @@ public class MetaUtils {
      *
      * @param name 名称
      * @return 值
+     * @throws PackageManager.NameNotFoundException 找不到参数
      */
     public static String getString(String name) throws PackageManager.NameNotFoundException {
         return getString(name, "");
@@ -56,6 +58,7 @@ public class MetaUtils {
      * @param name     名称
      * @param defValue 默认值
      * @return 值
+     * @throws PackageManager.NameNotFoundException 找不到参数
      */
     public static String getString(String name, String defValue) throws PackageManager.NameNotFoundException {
         Bundle meta = getMeta();
@@ -67,6 +70,7 @@ public class MetaUtils {
      *
      * @param name 名称
      * @return 值
+     * @throws PackageManager.NameNotFoundException 找不到参数
      */
     public static int getInt(String name) throws PackageManager.NameNotFoundException {
         return getInt(name, -1);
@@ -78,6 +82,7 @@ public class MetaUtils {
      * @param name     名称
      * @param defValue 默认值
      * @return 值
+     * @throws PackageManager.NameNotFoundException 找不到参数
      */
     public static int getInt(String name, int defValue) throws PackageManager.NameNotFoundException {
         Bundle meta = getMeta();
@@ -90,6 +95,7 @@ public class MetaUtils {
      *
      * @param name 名称
      * @return 值
+     * @throws PackageManager.NameNotFoundException 找不到参数
      */
     public static Object get(String name) throws PackageManager.NameNotFoundException {
         Bundle meta = getMeta();

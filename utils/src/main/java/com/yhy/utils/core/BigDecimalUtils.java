@@ -61,6 +61,7 @@ public class BigDecimalUtils {
      * @param value2 除数
      * @param scale  表示表示需要精确到小数点以后几位。
      * @return 两个参数的商
+     * @throws IllegalAccessException 非法数据
      */
     public static double div(double value1, double value2, int scale) throws IllegalAccessException {
         if (scale < 0) {
