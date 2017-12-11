@@ -3,7 +3,11 @@ package com.yhy.utils.provider;
 import android.support.v4.content.FileProvider;
 
 /**
- * Created by 颜洪毅 on 2017/8/11 14:12.
+ * author : 颜洪毅
+ * e-mail : yhyzgn@gmail.com
+ * time   : 2017-12-11 10:29
+ * version: 1.0.0
+ * desc   : 自定义文件提供者
  */
 public class AUFileProvider extends FileProvider {
 }

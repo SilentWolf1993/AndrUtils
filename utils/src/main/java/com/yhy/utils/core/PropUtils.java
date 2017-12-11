@@ -1,5 +1,6 @@
 package com.yhy.utils.core;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import java.io.IOException;
@@ -16,6 +17,7 @@ import java.util.Properties;
  * desc   : Properties工具类
  */
 public class PropUtils {
+    @SuppressLint("StaticFieldLeak")
     private static Context ctx;
 
     private static Map<Object, Properties> propMap;

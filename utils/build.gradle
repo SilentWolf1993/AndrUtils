@@ -3,7 +3,7 @@ apply plugin: 'com.novoda.bintray-release'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         minSdkVersion 14
@@ -39,7 +39,7 @@ publish {
     userOrg = 'yhyzgn'
     groupId = 'com.yhy.utils'
     artifactId = 'andr-utils'
-    publishVersion = '1.0.5'
+    publishVersion = '1.0.6'
     desc = 'Some utils which often used in android development.'
-    website = 'https://github.com/SilentWolf1993/AndrUtils'
+    website = 'https://github.com/yhyzgn/AndrUtils'
 }

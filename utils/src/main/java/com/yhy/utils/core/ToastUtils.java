@@ -1,13 +1,20 @@
 package com.yhy.utils.core;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.Toast;
 
 /**
- * Toast工具类
+ * author : 颜洪毅
+ * e-mail : yhyzgn@gmail.com
+ * time   : 2017-12-11 10:31
+ * version: 1.0.0
+ * desc   : Toast工具类
  */
 public class ToastUtils {
+    @SuppressLint("StaticFieldLeak")
     private static Context ctx;
+    private static Toast toast;
 
     private ToastUtils() {
         throw new UnsupportedOperationException("Can not create instance for class ToastUtils.");
@@ -64,7 +71,14 @@ public class ToastUtils {
      * @param longToast 是否是长提显示
      * @param text      显示内容
      */
+    @SuppressLint("ShowToast")
     private static void toast(boolean longToast, CharSequence text) {
-        Toast.makeText(ctx, text, longToast ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT).show();
+        if (null == toast) {
+            toast = Toast.makeText(ctx, text, longToast ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
+        } else {
+            toast.setText(text);
+            toast.setDuration(longToast ? Toast.LENGTH_LONG : Toast.LENGTH_SHORT);
+        }
+        toast.show();
     }
 }

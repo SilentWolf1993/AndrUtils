@@ -1,5 +1,6 @@
 package com.yhy.utils.core;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.ArrayRes;
@@ -19,7 +20,7 @@ import java.util.List;
  * desc   : 资源工具类
  */
 public class ResUtils {
-
+    @SuppressLint("StaticFieldLeak")
     private static Context mCtx;
 
     private ResUtils() {

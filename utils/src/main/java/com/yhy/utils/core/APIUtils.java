@@ -1,5 +1,6 @@
 package com.yhy.utils.core;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.text.TextUtils;
@@ -14,6 +15,7 @@ import java.io.IOException;
  * desc   : 接口工具类
  */
 public class APIUtils {
+    @SuppressLint("StaticFieldLeak")
     private static Context ctx;
     private static StringBuffer sb;
 

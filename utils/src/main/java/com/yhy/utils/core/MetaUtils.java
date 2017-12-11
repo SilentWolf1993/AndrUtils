@@ -1,5 +1,6 @@
 package com.yhy.utils.core;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -13,6 +14,7 @@ import android.os.Bundle;
  * desc   : meta参数工具类
  */
 public class MetaUtils {
+    @SuppressLint("StaticFieldLeak")
     private static Context ctx;
 
     private MetaUtils() {

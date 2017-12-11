@@ -1,6 +1,7 @@
 package com.yhy.utils.core;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.Instrumentation;
 import android.content.ComponentName;
@@ -26,9 +27,14 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * 系统工具类
+ * author : 颜洪毅
+ * e-mail : yhyzgn@gmail.com
+ * time   : 2017-12-11 10:31
+ * version: 1.0.0
+ * desc   : 系统工具类
  */
 public class SysUtils {
+    @SuppressLint("StaticFieldLeak")
     private static Context ctx;
 
     private SysUtils() {

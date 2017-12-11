@@ -1,8 +1,14 @@
 package com.yhy.utils.manager;
 
+import android.annotation.SuppressLint;
+import android.app.Application;
 import android.content.Context;
 
 import com.yhy.utils.core.APIUtils;
+import com.yhy.utils.core.ActivityUtils;
+import com.yhy.utils.core.BarUtils;
+import com.yhy.utils.core.CacheUtils;
+import com.yhy.utils.core.CleanUtils;
 import com.yhy.utils.core.ImgUtils;
 import com.yhy.utils.core.MetaUtils;
 import com.yhy.utils.core.PropUtils;
@@ -21,9 +27,10 @@ import java.io.IOException;
  * desc   : 工具类管理器
  */
 public class UtilsManager {
-    private static UtilsManager instance;
+    @SuppressLint("StaticFieldLeak")
+    private volatile static UtilsManager instance;
 
-    private Context mCtx;
+    private Application mApp;
 
     private UtilsManager() {
         if (null != instance) {
@@ -50,23 +57,27 @@ public class UtilsManager {
     /**
      * 初始化
      *
-     * @param ctx 上下文对象
+     * @param app 上下文对象
      * @return 当前对象
      */
-    public UtilsManager init(Context ctx) {
-        mCtx = ctx;
+    public UtilsManager init(Application app) {
+        mApp = app;
 
         // 初始化各工具类
-        MetaUtils.init(mCtx);
-        PropUtils.init(mCtx);
-        ResUtils.init(mCtx);
-        SysUtils.init(mCtx);
-        ToastUtils.init(mCtx);
-        SPUtils.init(mCtx);
+        ActivityUtils.init(mApp);
+        BarUtils.init(mApp);
+        MetaUtils.init(mApp);
+        PropUtils.init(mApp);
+        ResUtils.init(mApp);
+        SysUtils.init(mApp);
+        ToastUtils.init(mApp);
+        SPUtils.init(mApp);
+        CacheUtils.init(mApp);
+        CleanUtils.init(mApp);
 
         // 初始化api工具类
         try {
-            APIUtils.init(mCtx);
+            APIUtils.init(mApp);
         } catch (IOException e) {
             e.printStackTrace();
         }
