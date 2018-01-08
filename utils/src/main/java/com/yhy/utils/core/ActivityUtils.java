@@ -905,6 +905,7 @@ public class ActivityUtils {
      *
      * @param activity      activity
      * @param isIncludeSelf 是否结束该 activity 自己
+     * @return 是否结束成功
      */
     public static boolean finishToActivity(@NonNull final Activity activity,
                                            final boolean isIncludeSelf) {

@@ -2,11 +2,9 @@ package com.yhy.utils.manager;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
-import android.content.Context;
 
 import com.yhy.utils.core.APIUtils;
 import com.yhy.utils.core.ActivityUtils;
-import com.yhy.utils.core.BarUtils;
 import com.yhy.utils.core.CacheUtils;
 import com.yhy.utils.core.CleanUtils;
 import com.yhy.utils.core.ImgUtils;
@@ -65,7 +63,6 @@ public class UtilsManager {
 
         // 初始化各工具类
         ActivityUtils.init(mApp);
-        BarUtils.init(mApp);
         MetaUtils.init(mApp);
         PropUtils.init(mApp);
         ResUtils.init(mApp);
