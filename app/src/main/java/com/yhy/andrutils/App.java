@@ -22,7 +22,7 @@ public class App extends Application {
 
         // 初始化工具类
         UtilsManager.getInstance()
-                .init(this)
+                .init(this, BuildConfig.DEBUG)
                 .initImgLoader(new ImgUtils.ImgLoader() {
                     @Override
                     public <T> void load(Context ctx, ImageView iv, T model) {

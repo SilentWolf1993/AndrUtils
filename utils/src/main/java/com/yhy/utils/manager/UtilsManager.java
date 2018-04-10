@@ -8,6 +8,7 @@ import com.yhy.utils.core.ActivityUtils;
 import com.yhy.utils.core.CacheUtils;
 import com.yhy.utils.core.CleanUtils;
 import com.yhy.utils.core.ImgUtils;
+import com.yhy.utils.core.LogUtils;
 import com.yhy.utils.core.MetaUtils;
 import com.yhy.utils.core.PropUtils;
 import com.yhy.utils.core.ResUtils;
@@ -59,6 +60,17 @@ public class UtilsManager {
      * @return 当前对象
      */
     public UtilsManager init(Application app) {
+        return init(app, false);
+    }
+
+    /**
+     * 初始化
+     *
+     * @param app          上下文对象
+     * @param debugEnabled 是否是debug模式
+     * @return 当前对象
+     */
+    public UtilsManager init(Application app, boolean debugEnabled) {
         mApp = app;
 
         // 初始化各工具类
@@ -71,6 +83,9 @@ public class UtilsManager {
         SPUtils.init(mApp);
         CacheUtils.init(mApp);
         CleanUtils.init(mApp);
+
+        // Log工具类
+        LogUtils.getConfig().setApp(mApp).setLogEnable(debugEnabled).setGlobalTag(getClass().getSimpleName());
 
         // 初始化api工具类
         try {

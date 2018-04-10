@@ -1,10 +1,13 @@
 package com.yhy.andrutils;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 
+import com.yhy.utils.core.LogUtils;
 import com.yhy.utils.core.SysUtils;
 import com.yhy.utils.core.ToastUtils;
 
@@ -17,9 +20,12 @@ public class MainActivity extends AppCompatActivity {
 
 //        ToastUtils.longT(APIUtils.getApiByKey("user.regist"));
 
-//        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 100);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, 100);
 
         ToastUtils.longT(SysUtils.getDeviceId());
+
+        LogUtils.i("MainActivity", SysUtils.getApplicationId());
+        LogUtils.i("MainActivity", LogUtils.getConfig().toString());
 
         new Handler().postDelayed(new Runnable() {
             @Override

@@ -97,15 +97,20 @@ public class SysUtils {
         }
 
         TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
-        String imei = tm.getDeviceId();// 设备唯一标识 IMEI
-        if (TextUtils.isEmpty(imei)) {
-            imei = tm.getSubscriberId(); // IESI
+        String imei = null;
+        if (null != tm) {
+            // 设备唯一标识 IMEI
+            imei = tm.getDeviceId();
+            if (TextUtils.isEmpty(imei)) {
+                // IESI
+                imei = tm.getSubscriberId();
+            }
         }
         if (TextUtils.isEmpty(imei)) {
             // pad标识
             imei = Secure.getString(ctx.getContentResolver(), Secure.ANDROID_ID);
         }
-        if (TextUtils.isEmpty(imei)) {
+        if (TextUtils.isEmpty(imei) && null != tm) {
             imei = tm.getLine1Number();
         }
         if (TextUtils.isEmpty(imei)) {
@@ -127,8 +132,7 @@ public class SysUtils {
         } catch (NameNotFoundException e) {
             e.printStackTrace();
         }
-        String applicationName = (String) pm.getApplicationLabel(ai);
-        return applicationName;
+        return (String) pm.getApplicationLabel(ai);
     }
 
     /**
@@ -160,10 +164,10 @@ public class SysUtils {
                     return processName;
                 }
             } catch (Exception e) {
-                // Log.d("Process", "Error>> :"+ e.toString());
+//                 LogUtils.d("Process", "Error>> :"+ e.toString());
             }
         }
-        return processName;
+        return null;
     }
 
     /**
@@ -188,7 +192,8 @@ public class SysUtils {
         //为了兼容Android 7.0+，只能结合FileProvider来使用
         Uri uri = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            uri = AUFileProvider.getUriForFile(ctx, getApplicationId() + ".provider", apk);
+            uri = AUFileProvider.getUriForFile(ctx, getApplicationId() + ".provider.install.apk", apk);
+            ctx.grantUriPermission(getApplicationId(), uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.setDataAndType(uri, ctx.getContentResolver().getType(uri));
         } else {
@@ -266,10 +271,18 @@ public class SysUtils {
         ApplicationInfo applicationInfo = null;
         try {
             applicationInfo = ctx.getPackageManager().getApplicationInfo(ctx.getPackageName(), PackageManager.GET_META_DATA);
-            if (applicationInfo == null) {
-                throw new IllegalArgumentException("get application info = null, has no meta data! ");
+
+            String appId = null;
+            if (applicationInfo != null) {
+                appId = applicationInfo.packageName;
+                if (TextUtils.isEmpty(appId)) {
+                    appId = applicationInfo.processName;
+                }
             }
-            return applicationInfo.metaData.getString("APP_ID");
+            if (TextUtils.isEmpty(appId)) {
+                appId = ctx.getPackageName();
+            }
+            return appId;
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
