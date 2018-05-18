@@ -1,5 +1,6 @@
 package com.yhy.utils.core;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.TypedValue;
@@ -16,9 +17,20 @@ import java.io.ByteArrayOutputStream;
  * desc   : View工具类
  */
 public class ViewUtils {
+    @SuppressLint("StaticFieldLeak")
+    private static Context context;
 
     private ViewUtils() {
         throw new UnsupportedOperationException("Can not create instance for class ViewUtils.");
+    }
+
+    /**
+     * 初始化
+     *
+     * @param ctx 上下文对象
+     */
+    public static void init(Context ctx) {
+        context = ctx;
     }
 
     /**
@@ -36,11 +48,10 @@ public class ViewUtils {
     /**
      * dp转px
      *
-     * @param context 上下文对象
-     * @param dpVal   dp值
+     * @param dpVal dp值
      * @return px值
      */
-    public static int dp2px(Context context, float dpVal) {
+    public static int dp2px(float dpVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpVal, context
                 .getResources().getDisplayMetrics());
     }
@@ -48,11 +59,10 @@ public class ViewUtils {
     /**
      * sp转px
      *
-     * @param context 上下文对象
-     * @param spVal   sp值
+     * @param spVal sp值
      * @return px值
      */
-    public static int sp2px(Context context, float spVal) {
+    public static int sp2px(float spVal) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, spVal, context
                 .getResources().getDisplayMetrics());
     }
@@ -60,11 +70,10 @@ public class ViewUtils {
     /**
      * px转dp
      *
-     * @param context 上下文对象
-     * @param pxVal   px值
+     * @param pxVal px值
      * @return dp值
      */
-    public static float px2dp(Context context, float pxVal) {
+    public static float px2dp(float pxVal) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (pxVal / scale);
     }
@@ -72,11 +81,10 @@ public class ViewUtils {
     /**
      * px转sp
      *
-     * @param context 上下文对象
-     * @param pxVal   px值
+     * @param pxVal px值
      * @return sp值
      */
-    public static float px2sp(Context context, float pxVal) {
+    public static float px2sp(float pxVal) {
         return (pxVal / context.getResources().getDisplayMetrics().scaledDensity);
     }
 
