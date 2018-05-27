@@ -10,6 +10,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
 
+        <activity android:name=".helper.PermissionHelper$PermissionActivity" />
+
         <!--配置FileProvider-->
         <provider
             android:name=".provider.AUFileProvider"
@@ -21,7 +23,5 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/au_file_path" />
         </provider>
-
     </application>
-
 </manifest>

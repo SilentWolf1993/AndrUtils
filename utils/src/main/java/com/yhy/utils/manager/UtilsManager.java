@@ -16,6 +16,7 @@ import com.yhy.utils.core.SPUtils;
 import com.yhy.utils.core.SysUtils;
 import com.yhy.utils.core.ToastUtils;
 import com.yhy.utils.core.ViewUtils;
+import com.yhy.utils.helper.PermissionHelper;
 
 import java.io.IOException;
 
@@ -85,6 +86,8 @@ public class UtilsManager {
         CacheUtils.init(mApp);
         CleanUtils.init(mApp);
         ViewUtils.init(mApp);
+
+        PermissionHelper.getInstance().init(mApp);
 
         // Log工具类
         LogUtils.getConfig().setApp(mApp).setLogEnable(debugEnabled).setGlobalTag(getClass().getSimpleName());
