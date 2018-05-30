@@ -42,22 +42,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+//        findViewById(R.id.tv_call).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                PermissionHelper.getInstance()
+//                        .permissions(Manifest.permission.CALL_PHONE)
+//                        .request(new PermissionHelper.SimplePermissionCallback() {
+//                            @Override
+//                            public void onGranted() {
+//                                ToastUtils.shortT("已经同意打电话");
+//                            }
+//
+//                            @Override
+//                            public void onDenied() {
+//                                ToastUtils.shortT("拒绝了打电话");
+//                            }
+//                        });
+//            }
+//        });
         findViewById(R.id.tv_call).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PermissionHelper.getInstance()
-                        .permissions(Manifest.permission.CALL_PHONE)
-                        .request(new PermissionHelper.SimplePermissionCallback() {
-                            @Override
-                            public void onGranted() {
-                                ToastUtils.shortT("已经同意打电话");
-                            }
-
-                            @Override
-                            public void onDenied() {
-                                ToastUtils.shortT("拒绝了打电话");
-                            }
-                        });
+                SysUtils.callPhone("18313889251");
             }
         });
 

@@ -20,6 +20,7 @@ import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
+import com.yhy.utils.helper.PermissionHelper;
 import com.yhy.utils.provider.AUFileProvider;
 
 import java.io.File;
@@ -184,11 +185,27 @@ public class SysUtils {
      *
      * @param apk apk文件
      */
-    public static void installApk(File apk) {
+    public static void installApk(final File apk) {
+        if (!canInstall()) {
+            // Android 8.0+ 不能直接安装，需要请求权限
+            PermissionHelper.getInstance().permissions(Manifest.permission.REQUEST_INSTALL_PACKAGES).request(new PermissionHelper.SimplePermissionCallback() {
+                @Override
+                public void onGranted() {
+                    // 授权后重新调用安装方法
+                    installApk(apk);
+                }
+
+                @Override
+                public void onDenied() {
+                    ToastUtils.shortT("请到设置中开启“允许安装未知来源的应用");
+                }
+            });
+            return;
+        }
+
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(Intent.ACTION_VIEW);
-//        intent.setDataAndType(Uri.fromFile(apk), "application/vnd.android.package-archive");
         //为了兼容Android 7.0+，只能结合FileProvider来使用
         Uri uri = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -210,16 +227,33 @@ public class SysUtils {
     }
 
     /**
+     * 检查是否可安装应用
+     *
+     * @return 是否可安装
+     */
+    public static boolean canInstall() {
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.O || ctx.getPackageManager().canRequestPackageInstalls();
+    }
+
+    /**
      * 拨打电话
      *
      * @param phone 电话号码
      */
-    public static void callPhone(String phone) {
-        if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
-        ctx.startActivity(intent);
+    public static void callPhone(final String phone) {
+        PermissionHelper.getInstance().permissions(Manifest.permission.CALL_PHONE).request(new PermissionHelper.SimplePermissionCallback() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onGranted() {
+                Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
+                ctx.startActivity(callIntent);
+            }
+
+            @Override
+            public void onDenied() {
+                ToastUtils.shortT("请到应用设置中开启“拨打电话”权限");
+            }
+        });
     }
 
     /**
