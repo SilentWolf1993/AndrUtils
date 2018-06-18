@@ -90,7 +90,7 @@ public class UtilsManager {
         PermissionHelper.getInstance().init(mApp);
 
         // Log工具类
-        LogUtils.getConfig().setApp(mApp).setLogEnable(debugEnabled).setGlobalTag(getClass().getSimpleName());
+        LogUtils.getConfig().setApp(mApp).setLogSwitch(debugEnabled).setGlobalTag(getClass().getSimpleName());
 
         // 初始化api工具类
         try {

@@ -14,11 +14,17 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Process;
+import android.provider.Settings;
 import android.provider.Settings.Secure;
+import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.view.WindowManager;
 
 import com.yhy.utils.helper.PermissionHelper;
 import com.yhy.utils.provider.AUFileProvider;
@@ -90,34 +96,41 @@ public class SysUtils {
     /**
      * 获取设备号
      *
-     * @return 设备号
+     * @param callback 回调
      */
-    public static String getDeviceId() {
-        if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            return "";
-        }
-
-        TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
-        String imei = null;
-        if (null != tm) {
-            // 设备唯一标识 IMEI
-            imei = tm.getDeviceId();
-            if (TextUtils.isEmpty(imei)) {
-                // IESI
-                imei = tm.getSubscriberId();
+    public static void getDeviceId(final Callback<String> callback) {
+        PermissionHelper.getInstance().permissions(Manifest.permission.READ_PHONE_STATE).request(new PermissionHelper.SimplePermissionCallback() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onGranted() {
+                TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+                String imei = null;
+                if (null != tm) {
+                    // 设备唯一标识 IMEI
+                    imei = tm.getDeviceId();
+                    if (TextUtils.isEmpty(imei)) {
+                        // IESI
+                        imei = tm.getSubscriberId();
+                    }
+                }
+                if (TextUtils.isEmpty(imei)) {
+                    // pad标识
+                    imei = Secure.getString(ctx.getContentResolver(), Secure.ANDROID_ID);
+                }
+                if (TextUtils.isEmpty(imei) && null != tm) {
+                    imei = tm.getLine1Number();
+                }
+                if (TextUtils.isEmpty(imei)) {
+                    imei = "Unknow";
+                }
+                callback.onResult(imei);
             }
-        }
-        if (TextUtils.isEmpty(imei)) {
-            // pad标识
-            imei = Secure.getString(ctx.getContentResolver(), Secure.ANDROID_ID);
-        }
-        if (TextUtils.isEmpty(imei) && null != tm) {
-            imei = tm.getLine1Number();
-        }
-        if (TextUtils.isEmpty(imei)) {
-            imei = "Unknow";
-        }
-        return imei;
+
+            @Override
+            public void onDenied() {
+                callback.onResult("");
+            }
+        });
     }
 
     /**
@@ -165,7 +178,7 @@ public class SysUtils {
                     return processName;
                 }
             } catch (Exception e) {
-//                 LogUtils.d("Process", "Error>> :"+ e.toString());
+                e.printStackTrace();
             }
         }
         return null;
@@ -197,7 +210,8 @@ public class SysUtils {
 
                 @Override
                 public void onDenied() {
-                    ToastUtils.shortT("请到设置中开启“允许安装未知来源的应用");
+                    // 请求权限
+                    InstallSettingsActivity.start(ctx, apk);
                 }
             });
             return;
@@ -370,13 +384,78 @@ public class SysUtils {
     /**
      * 获取本机电话号码
      *
-     * @return 本机电话号码
+     * @param callback 回调
      */
-    public static String getPhoneNo() {
-        if (ActivityCompat.checkSelfPermission(ctx, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            return "";
+    public static void getPhoneNo(final Callback<String> callback) {
+        PermissionHelper.getInstance().permissions(Manifest.permission.READ_PHONE_STATE).request(new PermissionHelper.SimplePermissionCallback() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onGranted() {
+                TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+                callback.onResult(tm.getLine1Number());
+            }
+
+            @Override
+            public void onDenied() {
+                callback.onResult("");
+            }
+        });
+    }
+
+    /**
+     * 回调
+     *
+     * @param <T> 传回的数据类型
+     */
+    public interface Callback<T> {
+
+        /**
+         * 回调
+         *
+         * @param result 传回的数据
+         */
+        void onResult(T result);
+    }
+
+    private static class InstallSettingsActivity extends AppCompatActivity {
+        private File mApk;
+
+        /**
+         * 开启授权窗口
+         *
+         * @param ctx 上下文
+         * @param apk 安装包
+         */
+        static void start(Context ctx, File apk) {
+            Intent intent = new Intent(ctx, InstallSettingsActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putExtra("apk", apk);
+            ctx.startActivity(intent);
         }
-        TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
-        return tm.getLine1Number();
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        @Override
+        protected void onCreate(@Nullable Bundle savedInstanceState) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
+            super.onCreate(savedInstanceState);
+            mApk = (File) getIntent().getSerializableExtra("apk");
+            openInstallSettings();
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        private void openInstallSettings() {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+            startActivityForResult(intent, 1000);
+        }
+
+        @Override
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            super.onActivityResult(requestCode, resultCode, data);
+            switch (requestCode) {
+                case 1000:
+                    installApk(mApk);
+                    break;
+            }
+        }
     }
 }
