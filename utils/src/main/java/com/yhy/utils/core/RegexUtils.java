@@ -15,7 +15,7 @@ public class RegexUtils {
     // 数字
     private final static String REG_NUMBER = "^\\d+$";
     // 手机号码
-    private final static String REG_MOBILE = "^1[3,4,5,7,8]\\d{9}$";
+    private final static String REG_MOBILE = "^1[3,4,5,7,8,9]\\d{9}$";
     // 邮箱
     private final static String REG_EMAIL = "^(\\w+)(\\.\\w+)*@(\\w{2,8}\\.){1,3}\\w{2,8}$";
     // 网址
@@ -74,5 +74,18 @@ public class RegexUtils {
      */
     public static boolean match(String text, String reg) {
         return !TextUtils.isEmpty(text) && Pattern.compile(reg).matcher(text).matches();
+    }
+
+    /**
+     * 隐藏手机号中间四位
+     *
+     * @param mobile 手机号码
+     * @return 结果
+     */
+    public static String hideMobile(String mobile) {
+        if (isMobile(mobile)) {
+            return mobile.replaceAll("(\\d{3})\\d{4}(\\d{4})", "$1****$2");
+        }
+        return mobile;
     }
 }

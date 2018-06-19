@@ -15,6 +15,8 @@ import java.io.IOException;
  * desc   : 接口工具类
  */
 public class APIUtils {
+    private final static String DEF_API_ASSETS_NAME = "api-assets.properties";
+    private final static String DEF_API_HOST_KEY = "api.host";
     @SuppressLint("StaticFieldLeak")
     private static Context ctx;
     private static StringBuffer sb;
@@ -42,7 +44,12 @@ public class APIUtils {
      * @return 值
      */
     public static String get(String key) {
-        return PropUtils.get(APIUtils.class, key);
+        String url = PropUtils.get(APIUtils.class, key);
+        if (RegexUtils.match(url, ".*?\\$\\{.*?\\}.*")) {
+            String template = url.replaceAll(".*?\\$\\{(.*)?\\}.*", "$1");
+            url = url.replaceAll("(.*)?\\$\\{.*?\\}(.*)", "$1" + get(template) + "$2");
+        }
+        return url;
     }
 
     /**
@@ -50,9 +57,77 @@ public class APIUtils {
      *
      * @param apiKey 子url对应的key
      * @return 完整api
+     * @see APIUtils#getByKey(String)
      */
+    @Deprecated
     public static String getApiByKey(String apiKey) {
         return getApiByUrl(get(apiKey));
+    }
+
+    /**
+     * 根据接口子url对应properties中的key获取api地址
+     *
+     * @param hostKey 根url对应的key
+     * @param apiKey  子url对应的key
+     * @return 完整api
+     * @see APIUtils#getByKey(String, String)
+     */
+    @Deprecated
+    public static String getApiByKey(String hostKey, String apiKey) {
+        return getApiByUrl(PropUtils.get(APIUtils.class, hostKey), get(apiKey));
+    }
+
+    /**
+     * 根据接口子url对应properties中的key获取api地址
+     *
+     * @param key 子url对应的key
+     * @return 完整api
+     */
+    public static String getByKey(String key) {
+        return getApiByKey(key);
+    }
+
+    /**
+     * 根据接口子url对应properties中的key获取api地址
+     *
+     * @param hostKey 根url对应的key
+     * @param key     子url对应的key
+     * @return 完整api
+     */
+    public static String getByKey(String hostKey, String key) {
+        return getApiByKey(hostKey, key);
+    }
+
+    /**
+     * 根据接口子url获取api地址
+     *
+     * @param subUrl 子url
+     * @return 完整api
+     * @see APIUtils#getByUrl(String)
+     */
+    @Deprecated
+    public static String getApiByUrl(String subUrl) {
+        return getApiByUrl(PropUtils.get(APIUtils.class, DEF_API_HOST_KEY), subUrl);
+    }
+
+    /**
+     * 根据接口子url获取api地址
+     *
+     * @param host   host
+     * @param subUrl 子url
+     * @return 完整api
+     * @see APIUtils#getByUrl(String, String)
+     */
+    @Deprecated
+    public static String getApiByUrl(String host, String subUrl) {
+        if (TextUtils.isEmpty(host)) {
+            throw new IllegalStateException("Api host can not be null or empty.");
+        }
+        if (TextUtils.isEmpty(subUrl)) {
+            return host;
+        }
+        sb.delete(0, sb.length());
+        return sb.append(host).append(subUrl).toString();
     }
 
     /**
@@ -61,16 +136,19 @@ public class APIUtils {
      * @param subUrl 子url
      * @return 完整api
      */
-    public static String getApiByUrl(String subUrl) {
-        String apiHost = PropUtils.get(APIUtils.class, "api.host");
-        if (TextUtils.isEmpty(apiHost)) {
-            throw new IllegalStateException("Api host can not be null or empty.");
-        }
-        if (TextUtils.isEmpty(subUrl)) {
-            return apiHost;
-        }
-        sb.delete(0, sb.length());
-        return sb.append(apiHost).append(subUrl).toString();
+    public static String getByUrl(String subUrl) {
+        return getApiByUrl(subUrl);
+    }
+
+    /**
+     * 根据接口子url获取api地址
+     *
+     * @param host   host
+     * @param subUrl 子url
+     * @return 完整api
+     */
+    public static String getByUrl(String host, String subUrl) {
+        return getApiByUrl(host, subUrl);
     }
 
     /**
@@ -88,7 +166,7 @@ public class APIUtils {
         }
         // 默认文件名称
         if (TextUtils.isEmpty(apiAssets)) {
-            apiAssets = "api_assets.properties";
+            apiAssets = DEF_API_ASSETS_NAME;
         }
         PropUtils.load(APIUtils.class, apiAssets);
     }
