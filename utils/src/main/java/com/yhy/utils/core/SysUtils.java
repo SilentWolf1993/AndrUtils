@@ -20,10 +20,10 @@ import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.WindowManager;
 
 import com.yhy.utils.helper.PermissionHelper;
@@ -100,7 +100,7 @@ public class SysUtils {
      */
     public static void getDeviceId(final Callback<String> callback) {
         PermissionHelper.getInstance().permissions(Manifest.permission.READ_PHONE_STATE).request(new PermissionHelper.SimplePermissionCallback() {
-            @SuppressLint("MissingPermission")
+            @SuppressLint({"MissingPermission", "HardwareIds"})
             @Override
             public void onGranted() {
                 TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
@@ -167,6 +167,9 @@ public class SysUtils {
         int pid = getProcessId();
         String processName = null;
         ActivityManager am = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
+        if (null == am) {
+            return null;
+        }
         List<ActivityManager.RunningAppProcessInfo> l = am.getRunningAppProcesses();
         Iterator<ActivityManager.RunningAppProcessInfo> i = l.iterator();
         PackageManager pm = ctx.getPackageManager();
@@ -300,6 +303,9 @@ public class SysUtils {
         }
 
         ActivityManager am = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
+        if (null == am) {
+            return false;
+        }
         List<ActivityManager.RunningTaskInfo> list = am.getRunningTasks(1);
         if (list != null && list.size() > 0) {
             ComponentName cpn = list.get(0).topActivity;
@@ -388,11 +394,11 @@ public class SysUtils {
      */
     public static void getPhoneNo(final Callback<String> callback) {
         PermissionHelper.getInstance().permissions(Manifest.permission.READ_PHONE_STATE).request(new PermissionHelper.SimplePermissionCallback() {
-            @SuppressLint("MissingPermission")
+            @SuppressLint({"MissingPermission", "HardwareIds"})
             @Override
             public void onGranted() {
                 TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
-                callback.onResult(tm.getLine1Number());
+                callback.onResult(null != tm ? tm.getLine1Number() : "");
             }
 
             @Override
@@ -449,6 +455,12 @@ public class SysUtils {
         }
 
         @Override
+        public boolean dispatchTouchEvent(MotionEvent ev) {
+            finish();
+            return true;
+        }
+
+        @Override
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
             switch (requestCode) {
@@ -456,6 +468,7 @@ public class SysUtils {
                     installApk(mApk);
                     break;
             }
+            finish();
         }
     }
 }

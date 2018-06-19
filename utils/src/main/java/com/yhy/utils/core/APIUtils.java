@@ -19,6 +19,7 @@ public class APIUtils {
     private final static String DEF_API_HOST_KEY = "api.host";
     @SuppressLint("StaticFieldLeak")
     private static Context ctx;
+    private static String apiHost;
     private static StringBuffer sb;
 
     private APIUtils() {
@@ -107,7 +108,7 @@ public class APIUtils {
      */
     @Deprecated
     public static String getApiByUrl(String subUrl) {
-        return getApiByUrl(PropUtils.get(APIUtils.class, DEF_API_HOST_KEY), subUrl);
+        return getApiByUrl(PropUtils.get(APIUtils.class, apiHost), subUrl);
     }
 
     /**
@@ -158,16 +159,24 @@ public class APIUtils {
      */
     private static void load() throws IOException {
         // 从meta中获取api配置文件的名称
-        String apiAssets = null;
+        String assets = null;
+        String host = null;
         try {
-            apiAssets = MetaUtils.getString("API_ASSETS");
+            assets = MetaUtils.getString("API_ASSETS");
+            host = MetaUtils.getString("API_HOST");
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
         // 默认文件名称
-        if (TextUtils.isEmpty(apiAssets)) {
-            apiAssets = DEF_API_ASSETS_NAME;
+        if (TextUtils.isEmpty(assets)) {
+            assets = DEF_API_ASSETS_NAME;
         }
-        PropUtils.load(APIUtils.class, apiAssets);
+        // 设置api-host
+        if (!TextUtils.isEmpty(host)) {
+            apiHost = host;
+        } else {
+            apiHost = DEF_API_HOST_KEY;
+        }
+        PropUtils.load(APIUtils.class, assets);
     }
 }
