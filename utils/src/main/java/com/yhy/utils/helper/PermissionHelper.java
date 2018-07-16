@@ -270,6 +270,7 @@ public class PermissionHelper {
         /**
          * 已经授权
          */
+        @SuppressLint("MissingPermission")
         void onGranted();
 
         /**
@@ -287,6 +288,7 @@ public class PermissionHelper {
          *
          * @param granted 具体被授权的权限
          */
+        @SuppressLint("MissingPermission")
         void onGranted(List<String> granted);
 
         /**

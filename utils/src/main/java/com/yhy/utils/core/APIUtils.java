@@ -32,7 +32,7 @@ public class APIUtils {
      * @param context 上下文对象
      * @throws IOException Assets文件异常
      */
-    public static void init(Context context) throws IOException {
+    public static void init(Context context) throws Exception {
         ctx = context;
         load();
         sb = new StringBuffer();
@@ -75,7 +75,7 @@ public class APIUtils {
      */
     @Deprecated
     public static String getApiByKey(String hostKey, String apiKey) {
-        return getApiByUrl(PropUtils.get(APIUtils.class, hostKey), get(apiKey));
+        return getApiByUrl(get(hostKey), get(apiKey));
     }
 
     /**
@@ -108,7 +108,7 @@ public class APIUtils {
      */
     @Deprecated
     public static String getApiByUrl(String subUrl) {
-        return getApiByUrl(PropUtils.get(APIUtils.class, apiHost), subUrl);
+        return getApiByUrl(get(apiHost), subUrl);
     }
 
     /**
@@ -157,26 +157,23 @@ public class APIUtils {
      *
      * @throws IOException Assets文件异常
      */
-    private static void load() throws IOException {
+    private static void load() throws Exception {
         // 从meta中获取api配置文件的名称
-        String assets = null;
-        String host = null;
-        try {
-            assets = MetaUtils.getString("API_ASSETS");
-            host = MetaUtils.getString("API_HOST");
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
+        String assets = MetaUtils.getString("API_ASSETS");
+        String host = MetaUtils.getString("API_HOST");
+
         // 默认文件名称
         if (TextUtils.isEmpty(assets)) {
             assets = DEF_API_ASSETS_NAME;
         }
+
         // 设置api-host
         if (!TextUtils.isEmpty(host)) {
             apiHost = host;
         } else {
             apiHost = DEF_API_HOST_KEY;
         }
+
         PropUtils.load(APIUtils.class, assets);
     }
 }

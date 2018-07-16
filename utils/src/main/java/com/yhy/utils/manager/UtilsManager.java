@@ -95,7 +95,7 @@ public class UtilsManager {
         // 初始化api工具类
         try {
             APIUtils.init(mApp);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
