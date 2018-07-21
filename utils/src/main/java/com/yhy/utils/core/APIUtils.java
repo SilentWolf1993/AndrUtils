@@ -2,7 +2,6 @@ package com.yhy.utils.core;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.text.TextUtils;
 
 import java.io.IOException;
@@ -108,7 +107,7 @@ public class APIUtils {
      */
     @Deprecated
     public static String getApiByUrl(String subUrl) {
-        return getApiByUrl(get(apiHost), subUrl);
+        return getApiByUrl(apiHost, subUrl);
     }
 
     /**
@@ -155,25 +154,21 @@ public class APIUtils {
     /**
      * 加载属性文件
      *
-     * @throws IOException Assets文件异常
+     * @throws Exception Assets文件异常
      */
     private static void load() throws Exception {
         // 从meta中获取api配置文件的名称
         String assets = MetaUtils.getString("API_ASSETS");
         String host = MetaUtils.getString("API_HOST");
-
         // 默认文件名称
         if (TextUtils.isEmpty(assets)) {
             assets = DEF_API_ASSETS_NAME;
         }
-
         // 设置api-host
-        if (!TextUtils.isEmpty(host)) {
-            apiHost = host;
-        } else {
-            apiHost = DEF_API_HOST_KEY;
+        if (TextUtils.isEmpty(host)) {
+            host = DEF_API_HOST_KEY;
         }
-
         PropUtils.load(APIUtils.class, assets);
+        apiHost = get(host);
     }
 }
