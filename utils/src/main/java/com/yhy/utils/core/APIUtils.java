@@ -5,6 +5,10 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * author : 颜洪毅
@@ -20,6 +24,7 @@ public class APIUtils {
     private static Context ctx;
     private static String apiHost;
     private static StringBuffer sb;
+    private static Map<String, String> cacheMap = new HashMap<>();
 
     private APIUtils() {
         throw new UnsupportedOperationException("Can not instantiate utils class.");
@@ -45,11 +50,74 @@ public class APIUtils {
      */
     public static String get(String key) {
         String url = PropUtils.get(APIUtils.class, key);
-        if (RegexUtils.match(url, ".*?\\$\\{.*?\\}.*")) {
-            String template = url.replaceAll(".*?\\$\\{(.*)?\\}.*", "$1");
-            url = url.replaceAll("(.*)?\\$\\{.*?\\}(.*)", "$1" + get(template) + "$2");
+        if (RegexUtils.match(url, ".*?((\\$\\{.*?\\}).*?)+.*?")) {
+            Pattern compile = Pattern.compile(".*?((\\$\\{.*?\\}).*?)+.*?");
+            Matcher matcher = compile.matcher(url);
+
+            String group, value;
+            while (matcher.find()) {
+                group = matcher.group(1);
+                if (cacheMap.containsKey(group)) {
+                    value = cacheMap.get(group);
+                } else {
+                    value = get(group.substring(2, group.length() - 1));
+                    cacheMap.put(group, value);
+                }
+                url = url.replace(group, value);
+            }
         }
+        cacheMap.clear();
         return url;
+    }
+
+    /**
+     * 设置属性值
+     *
+     * @param key   属性名称
+     * @param value 属性值
+     */
+    public static void set(String key, String value) {
+        PropUtils.set(APIUtils.class, key, value);
+    }
+
+    /**
+     * 设置属性值
+     *
+     * @param key   属性名称
+     * @param value 属性值
+     */
+    public static void set(String key, int value) {
+        PropUtils.set(APIUtils.class, key, value);
+    }
+
+    /**
+     * 设置属性值
+     *
+     * @param key   属性名称
+     * @param value 属性值
+     */
+    public static void set(String key, long value) {
+        PropUtils.set(APIUtils.class, key, value);
+    }
+
+    /**
+     * 设置属性值
+     *
+     * @param key   属性名称
+     * @param value 属性值
+     */
+    public static void set(String key, double value) {
+        PropUtils.set(APIUtils.class, key, value);
+    }
+
+    /**
+     * 设置属性值
+     *
+     * @param key   属性名称
+     * @param value 属性值
+     */
+    public static void set(String key, Object value) {
+        PropUtils.set(APIUtils.class, key, value);
     }
 
     /**

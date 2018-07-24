@@ -19,7 +19,6 @@ import java.util.Properties;
 public class PropUtils {
     @SuppressLint("StaticFieldLeak")
     private static Context ctx;
-
     private static Map<Object, Properties> propMap;
 
     private PropUtils() {
@@ -84,11 +83,82 @@ public class PropUtils {
      * @return 属性值
      */
     public static String get(Object tag, String key, String defValue) {
-        for (Map.Entry<Object, Properties> et : propMap.entrySet()) {
-            if (et.getKey() == tag) {
-                return et.getValue().getProperty(key, defValue);
-            }
+        if (propMap.containsKey(tag)) {
+            return propMap.get(tag).getProperty(key, defValue);
         }
         return null;
+    }
+
+    /**
+     * 设置属性值
+     *
+     * @param tag   标记，一般传this即可
+     * @param key   属性名称
+     * @param value 属性值
+     */
+    public static void set(Object tag, String key, String value) {
+        if (!propMap.containsKey(tag)) {
+            propMap.put(tag, new Properties());
+        }
+        if (null == value || "null".equals(value)) {
+            propMap.get(tag).remove(key);
+            return;
+        }
+        propMap.get(tag).setProperty(key, value);
+    }
+
+    /**
+     * 设置属性值
+     *
+     * @param tag   标记，一般传this即可
+     * @param key   属性名称
+     * @param value 属性值
+     */
+    public static void set(Object tag, String key, int value) {
+        set(tag, key, String.valueOf(value));
+    }
+
+    /**
+     * 设置属性值
+     *
+     * @param tag   标记，一般传this即可
+     * @param key   属性名称
+     * @param value 属性值
+     */
+    public static void set(Object tag, String key, long value) {
+        set(tag, key, String.valueOf(value));
+    }
+
+    /**
+     * 设置属性值
+     *
+     * @param tag   标记，一般传this即可
+     * @param key   属性名称
+     * @param value 属性值
+     */
+    public static void set(Object tag, String key, float value) {
+        set(tag, key, String.valueOf(value));
+    }
+
+    /**
+     * 设置属性值
+     *
+     * @param tag   标记，一般传this即可
+     * @param key   属性名称
+     * @param value 属性值
+     */
+    public static void set(Object tag, String key, double value) {
+        set(tag, key, String.valueOf(value));
+    }
+
+    /**
+     * 设置属性值
+     *
+     * @param tag   标记，一般传this即可
+     * @param key   属性名称
+     * @param value 属性值
+     */
+    public static void set(Object tag, String key, Object value) {
+        set(tag, key, String.valueOf(value));
     }
 }

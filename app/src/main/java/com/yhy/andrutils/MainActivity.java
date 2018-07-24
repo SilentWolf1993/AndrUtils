@@ -2,9 +2,6 @@ package com.yhy.andrutils;
 
 import android.Manifest;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -25,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         String apiUpload = APIUtils.getByKey("sys.common.upload.avatar");
+        LogUtils.i(apiUpload);
+        APIUtils.set("global.user.id", 1024);
+        apiUpload = APIUtils.getByKey("sys.common.upload.avatar");
         LogUtils.i(apiUpload);
 
         findViewById(R.id.tv_camera).setOnClickListener(new View.OnClickListener() {
