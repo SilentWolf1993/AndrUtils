@@ -1,5 +1,8 @@
+import guru.stefma.bintrayrelease.ReleasePlugin
+
 apply plugin: 'com.android.library'
-apply plugin: 'com.novoda.bintray-release'
+//apply plugin: 'com.novoda.bintray-release'
+apply plugin: ReleasePlugin
 
 android {
     compileSdkVersion 27
@@ -34,11 +37,20 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 }
 
+//publish {
+//    userOrg = 'yhyzgn'
+//    groupId = 'com.yhy.utils'
+//    artifactId = 'andr-utils'
+//    publishVersion = '1.0.16'
+//    desc = 'Some utils which often used in android development.'
+//    website = 'https://github.com/yhyzgn/AndrUtils'
+//}
+
+group = "com.yhy.utils"
+version = "1.0.17"
 publish {
     userOrg = 'yhyzgn'
-    groupId = 'com.yhy.utils'
     artifactId = 'andr-utils'
-    publishVersion = '1.0.16'
     desc = 'Some utils which often used in android development.'
     website = 'https://github.com/yhyzgn/AndrUtils'
 }
