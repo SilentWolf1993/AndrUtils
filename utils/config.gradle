@@ -1,0 +1,26 @@
+ext {
+    pkg = [
+            groupId   : 'com.yhy.utils',
+            artifactId: 'andr-utils',
+            version   : '1.0.20',
+            desc      : 'Some utils which often used in android development.'
+    ]
+
+    developer = [
+            id   : 'yhyzgn',
+            name : 'yhyzgn',
+            email: 'yhyzgn@gmail.com'
+    ]
+
+    user = [
+            org: 'yhyzgn'
+    ]
+
+    cvs = [
+            url: 'https://github.com/yhyzgn/AndrUtils'
+    ]
+
+    doc = [
+            title: 'Doc for Android-Utils'
+    ]
+}

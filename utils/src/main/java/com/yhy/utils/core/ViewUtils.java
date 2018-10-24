@@ -3,6 +3,8 @@ package com.yhy.utils.core;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,30 +91,53 @@ public class ViewUtils {
     }
 
     /**
-     * 对控件截图
+     * 将view转成图片文件字节流
      *
-     * @param v       需要进行截图的控件
+     * @param view    需要进行截图的控件
      * @param quality 图片的质量 0-100
      * @return 该控件截图的byte数组对象
      */
-    public static byte[] printScreen(View v, int quality) {
+    public static byte[] printView(View view, int quality) {
+        Bitmap bitmap = printView(view);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        v.setDrawingCacheEnabled(true);
-        v.buildDrawingCache(true);
-        Bitmap bitmap = v.getDrawingCache();
         bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
         return baos.toByteArray();
     }
 
     /**
-     * 截图
+     * 将view转换成bitmap图片
+     * <p>
+     * 适用于已经正常显示在界面上的view
      *
-     * @param v 需要进行截图的控件
+     * @param view 需要进行截图的控件
      * @return 该控件截图的Bitmap对象
      */
-    public static Bitmap printScreen(View v) {
-        v.setDrawingCacheEnabled(true);
-        v.buildDrawingCache();
-        return v.getDrawingCache();
+    public static Bitmap printView(View view) {
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache();
+        // DrawingCache得到的位图在禁用后会被回收
+        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
+        view.setDrawingCacheEnabled(false);
+        return bitmap;
+    }
+
+    /**
+     * 将view转换成bitmap图片
+     * <p>
+     * 适用于尚未显示在界面上的view
+     *
+     * @param view 需要进行截图的控件
+     * @return 该控件截图的Bitmap对象
+     */
+    public static Bitmap printViewAdvance(View view) {
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        int width = view.getMeasuredWidth();
+        int height = view.getMeasuredHeight();
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        canvas.drawColor(Color.TRANSPARENT);
+        view.draw(canvas);
+        return bitmap;
     }
 }
