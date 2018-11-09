@@ -11,6 +11,7 @@ import com.yhy.utils.core.LogUtils;
 import com.yhy.utils.core.SysUtils;
 import com.yhy.utils.core.ToastUtils;
 import com.yhy.utils.helper.PermissionHelper;
+import com.yhy.utils.helper.SMSCodeAutoFillHelper;
 
 import java.util.List;
 
@@ -115,5 +116,33 @@ public class MainActivity extends AppCompatActivity {
                         });
             }
         });
+
+        SMSCodeAutoFillHelper.getInstance().subscribe(this, 4, new SMSCodeAutoFillHelper.OnReadListener() {
+            @Override
+            public void onResolved(String address, String code) {
+                ToastUtils.longT("收到来自【" + address + "】的验证码【" + code + "】");
+            }
+
+            @Override
+            public void onError(int code, String error) {
+                switch (code) {
+                    case SMSCodeAutoFillHelper.CODE_ERROR_PERMISSION:
+                        ToastUtils.longT("读取短信权限已被拒绝，请手动开启");
+                        break;
+                    case SMSCodeAutoFillHelper.CODE_ERROR_PARSE:
+                        ToastUtils.longT("短信验证码解析失败，请手动填写");
+                        break;
+                    case SMSCodeAutoFillHelper.CODE_ERROR_FOUND:
+                        ToastUtils.longT("短信读取失败，可能是系统开启了“验证码安全保护”功能");
+                        break;
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        SMSCodeAutoFillHelper.getInstance().unSubscribe(this);
     }
 }

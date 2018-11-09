@@ -1,7 +1,7 @@
 # AndrUtils
 > `Android`日常开发中的一些工具类
 
-![utils](https://img.shields.io/badge/jCenter-1.0.20-brightgreen.svg)
+![utils](https://img.shields.io/badge/jCenter-1.1.3-brightgreen.svg)
 
 
 

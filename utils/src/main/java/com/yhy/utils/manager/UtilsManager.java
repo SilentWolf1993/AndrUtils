@@ -17,6 +17,7 @@ import com.yhy.utils.core.SysUtils;
 import com.yhy.utils.core.ToastUtils;
 import com.yhy.utils.core.ViewUtils;
 import com.yhy.utils.helper.PermissionHelper;
+import com.yhy.utils.helper.SMSCodeAutoFillHelper;
 
 import java.io.IOException;
 
@@ -88,6 +89,8 @@ public class UtilsManager {
         ViewUtils.init(mApp);
 
         PermissionHelper.getInstance().init(mApp);
+
+        SMSCodeAutoFillHelper.getInstance().init(mApp);
 
         // Log工具类
         LogUtils.getConfig().setApp(mApp).setLogSwitch(debugEnabled).setGlobalTag(getClass().getSimpleName());
