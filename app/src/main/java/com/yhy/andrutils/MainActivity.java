@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        SMSCodeAutoFillHelper.getInstance().subscribe(this, 4, new SMSCodeAutoFillHelper.OnReadListener() {
+        SMSCodeAutoFillHelper.getInstance().subscribe(this, 4, new SMSCodeAutoFillHelper.OnResolveListener() {
             @Override
             public void onResolved(String address, String code) {
                 ToastUtils.longT("收到来自【" + address + "】的验证码【" + code + "】");

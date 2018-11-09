@@ -80,7 +80,7 @@ public class SMSCodeAutoFillHelper {
      * @param listener 监听器
      */
     @SuppressLint("HandlerLeak")
-    public void subscribe(Object tag, int length, final OnReadListener listener) {
+    public void subscribe(Object tag, int length, final OnResolveListener listener) {
         Uri uri = Uri.parse("content://sms");
 
         Handler handler = new Handler() {
@@ -251,7 +251,7 @@ public class SMSCodeAutoFillHelper {
     /**
      * 短信验证码监听器
      */
-    public interface OnReadListener {
+    public interface OnResolveListener {
 
         /**
          * 成功处理验证码时将被回调
