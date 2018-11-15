@@ -126,7 +126,7 @@ public class StatusBarUtils {
      * @param dark     是否改为深色
      */
     public static void darkMode(Activity activity, boolean dark) {
-        darkMode(activity.getWindow(), true, DEFAULT_COLOR, DEFAULT_ALPHA);
+        darkMode(activity.getWindow(), dark, DEFAULT_COLOR, DEFAULT_ALPHA);
     }
 
     /**
