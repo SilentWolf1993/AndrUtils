@@ -126,7 +126,15 @@ public class StatusBarUtils {
      * @param dark     是否改为深色
      */
     public static void darkMode(Activity activity, boolean dark) {
-        darkMode(activity.getWindow(), dark, DEFAULT_COLOR, DEFAULT_ALPHA);
+        if (isFlyme4Later()) {
+            darkModeForFlyme4(activity.getWindow(), dark);
+        } else if (isMIUI6Later()) {
+            darkModeForMIUI(activity.getWindow(), dark);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            darkModeForM(activity.getWindow(), dark);
+        } else if (isOPPO()) {
+            darkModeForOPPO(activity.getWindow(), dark);
+        }
     }
 
     /**
@@ -135,7 +143,7 @@ public class StatusBarUtils {
      * @param activity 当前Activity
      */
     public static void darkMode(Activity activity) {
-        darkMode(activity.getWindow(), DEFAULT_COLOR, DEFAULT_ALPHA);
+        darkMode(activity, DEFAULT_COLOR, DEFAULT_ALPHA);
     }
 
     /**
@@ -157,31 +165,19 @@ public class StatusBarUtils {
      * @param alpha  透明度
      */
     public static void darkMode(Window window, int color, @FloatRange(from = 0.0, to = 1.0) float alpha) {
-        darkMode(window, true, color, alpha);
-    }
-
-    /**
-     * 设置状态栏darkMode,字体颜色及icon变黑(目前支持MIUI6以上,Flyme4以上,Android M以上)
-     *
-     * @param window 当前窗口
-     * @param dark   是否深色
-     * @param color  状态栏颜色
-     * @param alpha  透明度
-     */
-    public static void darkMode(Window window, boolean dark, int color, @FloatRange(from = 0.0, to = 1.0) float alpha) {
         if (isFlyme4Later()) {
             // 魅族Flyme4以上
-            darkModeForFlyme4(window, dark);
+            darkModeForFlyme4(window, true);
             immersive(window, color, alpha);
         } else if (isMIUI6Later()) {
             // 小米MIUI6.0以上
-            darkModeForMIUI(window, dark);
+            darkModeForMIUI(window, true);
             immersive(window, color, alpha);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            darkModeForM(window, dark);
+            darkModeForM(window, true);
             immersive(window, color, alpha);
         } else if (isOPPO()) {
-            darkModeForOPPO(window, dark);
+            darkModeForOPPO(window, true);
             immersive(window, color, alpha);
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

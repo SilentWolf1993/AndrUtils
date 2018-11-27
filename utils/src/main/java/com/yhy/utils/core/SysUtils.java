@@ -262,8 +262,9 @@ public class SysUtils {
             @SuppressLint("MissingPermission")
             @Override
             public void onGranted() {
-                Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
-                ctx.startActivity(callIntent);
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phone));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ctx.startActivity(intent);
             }
 
             @Override
@@ -451,6 +452,7 @@ public class SysUtils {
         @RequiresApi(api = Build.VERSION_CODES.O)
         private void openInstallSettings() {
             Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivityForResult(intent, 1000);
         }
 
