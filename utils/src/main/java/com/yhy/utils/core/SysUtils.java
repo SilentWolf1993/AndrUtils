@@ -12,6 +12,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
+import android.hardware.HardwareBuffer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +21,8 @@ import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
+import android.support.annotation.RequiresPermission;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -32,6 +35,7 @@ import com.yhy.utils.provider.AUFileProvider;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * author : 颜洪毅
@@ -80,13 +84,13 @@ public class SysUtils {
      *
      * @return 版本号
      */
-    public static int getVersionCode() {
+    public static long getVersionCode() {
         PackageManager packageManager = ctx.getPackageManager();
         try {
             // 得到apk的功能清单文件:为了防止出错直接使用getPackageName()方法获得包名
             PackageInfo packageInfo = packageManager.getPackageInfo(ctx.getPackageName(), 0);
             // 返回版本号
-            return packageInfo.versionCode;
+            return packageInfo.getLongVersionCode();
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -100,30 +104,9 @@ public class SysUtils {
      */
     public static void getDeviceId(final Callback<String> callback) {
         PermissionHelper.getInstance().permissions(Manifest.permission.READ_PHONE_STATE).request(new PermissionHelper.SimplePermissionCallback() {
-            @SuppressLint({"MissingPermission", "HardwareIds"})
             @Override
             public void onGranted() {
-                TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
-                String imei = null;
-                if (null != tm) {
-                    // 设备唯一标识 IMEI
-                    imei = tm.getDeviceId();
-                    if (TextUtils.isEmpty(imei)) {
-                        // IESI
-                        imei = tm.getSubscriberId();
-                    }
-                }
-                if (TextUtils.isEmpty(imei)) {
-                    // pad标识
-                    imei = Secure.getString(ctx.getContentResolver(), Secure.ANDROID_ID);
-                }
-                if (TextUtils.isEmpty(imei) && null != tm) {
-                    imei = tm.getLine1Number();
-                }
-                if (TextUtils.isEmpty(imei)) {
-                    imei = "Unknow";
-                }
-                callback.onResult(imei);
+                callback.onResult(getDeviceId());
             }
 
             @Override
@@ -131,6 +114,35 @@ public class SysUtils {
                 callback.onResult("");
             }
         });
+    }
+
+    /**
+     * 获取设备号
+     *
+     * @return 设备号
+     */
+    @SuppressLint({"HardwareIds"})
+    public static String getDeviceId() {
+        TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+        StringBuilder sb = new StringBuilder();
+        if (null != tm && ActivityCompat.checkSelfPermission(ctx, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // 设备唯一标识 IMEI
+            sb.append(null != tm.getDeviceId() ? tm.getDeviceId() : "");
+            sb.append(null != tm.getSubscriberId() ? tm.getSubscriberId() : "");
+            // Build.SERIAL
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                sb.append(null != Build.getSerial() ? Build.getSerial() : "");
+            }
+        }
+        // ANDROID_ID
+        String androidId = Secure.getString(ctx.getContentResolver(), Secure.ANDROID_ID);
+        sb.append(null != androidId ? androidId : "");
+
+        // 未找到
+        if (TextUtils.isEmpty(sb.toString())) {
+            sb.append("Unknown");
+        }
+        return EncryptUtils.encryptMD5ToString(sb.toString()).toLowerCase(Locale.getDefault());
     }
 
     /**

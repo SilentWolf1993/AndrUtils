@@ -1,6 +1,7 @@
 package com.yhy.andrutils;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -27,7 +28,19 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        StatusBarUtils.darkMode(this, true);
+        StatusBarUtils.darkMode(this);
+
+        PermissionHelper.getInstance().permissions(Manifest.permission.READ_PHONE_STATE).request(new PermissionHelper.SimplePermissionCallback() {
+            @Override
+            public void onGranted() {
+                LogUtils.i("授权了READ_PHONE_STATE权限，获取到设备ID为：" + SysUtils.getDeviceId());
+            }
+
+            @Override
+            public void onDenied() {
+                LogUtils.i("拒绝了READ_PHONE_STATE权限，获取到设备ID为：" + SysUtils.getDeviceId());
+            }
+        });
 
         String apiUpload = APIUtils.getByKey("sys.common.upload.avatar");
         LogUtils.i(apiUpload);

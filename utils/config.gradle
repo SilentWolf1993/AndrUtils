@@ -2,7 +2,7 @@ ext {
     pkg = [
             groupId   : 'com.yhy.utils',
             artifactId: 'andr-utils',
-            version   : '1.1.7',
+            version   : '1.1.8',
             desc      : 'Some utils which often used in android development.'
     ]
 
