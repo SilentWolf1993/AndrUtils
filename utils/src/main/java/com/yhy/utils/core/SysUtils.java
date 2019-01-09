@@ -436,7 +436,7 @@ public class SysUtils {
         void onResult(T result);
     }
 
-    private static class InstallSettingsActivity extends AppCompatActivity {
+    public static class InstallSettingsActivity extends AppCompatActivity {
         private File mApk;
 
         /**
