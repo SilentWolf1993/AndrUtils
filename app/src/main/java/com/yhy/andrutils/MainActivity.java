@@ -8,8 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.webkit.MimeTypeMap;
 
 import com.yhy.utils.core.APIUtils;
+import com.yhy.utils.core.FileUtils;
 import com.yhy.utils.core.LogUtils;
 import com.yhy.utils.core.StatusBarUtils;
 import com.yhy.utils.core.SysUtils;
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         StatusBarUtils.darkMode(this);
+
+
 
         PermissionHelper.getInstance().permissions(Manifest.permission.READ_PHONE_STATE).request(new PermissionHelper.SimplePermissionCallback() {
             @Override
@@ -103,8 +107,8 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onGranted() {
                                 ToastUtils.shortT("已经同意发短信");
-                                SysUtils.sendSMS("1831889251", "我饿了");
-//                                SysUtils.sendMediaSMS("18313889251", "我饿了", "发送彩信", SysUtils.compatUri(new File("/sdcard/Download/test.apk")), null);
+//                                SysUtils.sendSMS("1831889251", "我饿了");
+                                SysUtils.sendMediaSMS("18313889251", "我饿了", "发送彩信", new File("/sdcard/Pictures/1.jpg"), null);
                             }
 
                             @Override
@@ -145,6 +149,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 File file = new File("/sdcard/Download/test.apk");
+                ToastUtils.shortT(FileUtils.getMimeType(file));
+
                 if (file.exists()) {
                     SysUtils.installApk(file);
                 } else {

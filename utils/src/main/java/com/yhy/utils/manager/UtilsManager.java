@@ -7,6 +7,7 @@ import com.yhy.utils.core.APIUtils;
 import com.yhy.utils.core.ActivityUtils;
 import com.yhy.utils.core.CacheUtils;
 import com.yhy.utils.core.CleanUtils;
+import com.yhy.utils.core.FileUtils;
 import com.yhy.utils.core.ImgUtils;
 import com.yhy.utils.core.LogUtils;
 import com.yhy.utils.core.MetaUtils;
@@ -77,12 +78,13 @@ public class UtilsManager {
         mApp = app;
 
         // 初始化各工具类
+        FileUtils.init(mApp);
+        ToastUtils.init(mApp);
         ActivityUtils.init(mApp);
         MetaUtils.init(mApp);
         PropUtils.init(mApp);
         ResUtils.init(mApp);
         SysUtils.init(mApp);
-        ToastUtils.init(mApp);
         SPUtils.init(mApp);
         CacheUtils.init(mApp);
         CleanUtils.init(mApp);

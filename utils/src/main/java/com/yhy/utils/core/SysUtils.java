@@ -265,7 +265,7 @@ public class SysUtils {
      * @param file 文件
      * @return uri
      */
-    public static Uri compatUri(File file) {
+    public static Uri getUriCompat(File file) {
         Uri uri = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             uri = AUFileProvider.getUriForFile(ctx, getApplicationId() + ".provider.install.apk", file);
@@ -342,7 +342,7 @@ public class SysUtils {
      * @param attachment 彩信附件uri
      * @param extra      附加信息
      */
-    public static void sendMediaSMS(final String phone, final String message, final String subject, final Uri attachment, final String extra) {
+    public static void sendMediaSMS(final String phone, final String message, final String subject, final File attachment, final String extra) {
         PermissionHelper.getInstance().permissions(Manifest.permission.SEND_SMS).request(new PermissionHelper.SimplePermissionCallback() {
             @Override
             public void onGranted() {
@@ -354,9 +354,9 @@ public class SysUtils {
                 // 彩信内容
                 intent.putExtra("sms_body", message);
                 // 彩信附件uri
-                intent.putExtra(Intent.EXTRA_STREAM, attachment);
+                intent.putExtra(Intent.EXTRA_STREAM, getUriCompat(attachment));
                 // 彩信附件类型
-                intent.setType("*/*");
+                intent.setType(FileUtils.getMimeType(attachment));
                 // 附加信息
                 intent.putExtra(Intent.EXTRA_TEXT, extra);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
