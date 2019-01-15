@@ -12,7 +12,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
-import android.hardware.HardwareBuffer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,7 +20,6 @@ import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
-import android.support.annotation.RequiresPermission;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
@@ -90,8 +88,14 @@ public class SysUtils {
             // 得到apk的功能清单文件:为了防止出错直接使用getPackageName()方法获得包名
             PackageInfo packageInfo = packageManager.getPackageInfo(ctx.getPackageName(), 0);
             // 返回版本号
-            return packageInfo.getLongVersionCode();
+            // Android 8.0 +
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                return packageInfo.getLongVersionCode();
+            }
+            return packageInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodError e) {
             e.printStackTrace();
         }
         return 0;
@@ -256,6 +260,23 @@ public class SysUtils {
     }
 
     /**
+     * 兼容Android7.0+获取文件URI
+     *
+     * @param file 文件
+     * @return uri
+     */
+    public static Uri compatUri(File file) {
+        Uri uri = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            uri = AUFileProvider.getUriForFile(ctx, getApplicationId() + ".provider.install.apk", file);
+            ctx.grantUriPermission(getApplicationId(), uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        } else {
+            uri = Uri.fromFile(file);
+        }
+        return uri;
+    }
+
+    /**
      * 检查是否可安装应用
      *
      * @return 是否可安装
@@ -282,6 +303,69 @@ public class SysUtils {
             @Override
             public void onDenied() {
                 ToastUtils.shortT("请到应用设置中开启“拨打电话”权限");
+            }
+        });
+    }
+
+    /**
+     * 发送短信
+     *
+     * @param phone   目标号码
+     * @param message 消息内容
+     */
+    public static void sendSMS(final String phone, final String message) {
+        PermissionHelper.getInstance().permissions(Manifest.permission.SEND_SMS).request(new PermissionHelper.SimplePermissionCallback() {
+            @Override
+            public void onGranted() {
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                //加smsto确保只能由短信应用发送，不能用其他软件发送
+                intent.setData(Uri.parse("smsto:" + phone));
+                // 内容
+                intent.putExtra("sms_body", message);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ctx.startActivity(intent);
+            }
+
+            @Override
+            public void onDenied() {
+                ToastUtils.shortT("请到应用设置中开启“发送短信”权限");
+            }
+        });
+    }
+
+    /**
+     * 发送彩信
+     *
+     * @param phone      目标号码
+     * @param message    消息内容
+     * @param subject    彩信主题
+     * @param attachment 彩信附件uri
+     * @param extra      附加信息
+     */
+    public static void sendMediaSMS(final String phone, final String message, final String subject, final Uri attachment, final String extra) {
+        PermissionHelper.getInstance().permissions(Manifest.permission.SEND_SMS).request(new PermissionHelper.SimplePermissionCallback() {
+            @Override
+            public void onGranted() {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                // 目标号码
+                intent.putExtra("address", "10086");
+                // 彩信主题
+                intent.putExtra("subject", subject);
+                // 彩信内容
+                intent.putExtra("sms_body", message);
+                // 彩信附件uri
+                intent.putExtra(Intent.EXTRA_STREAM, attachment);
+                // 彩信附件类型
+                intent.setType("*/*");
+                // 附加信息
+                intent.putExtra(Intent.EXTRA_TEXT, extra);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ctx.startActivity(intent);
+            }
+
+            @Override
+            public void onDenied() {
+                ToastUtils.shortT("请到应用设置中开启“发送短信”权限");
             }
         });
     }
@@ -458,14 +542,19 @@ public class SysUtils {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
             super.onCreate(savedInstanceState);
             mApk = (File) getIntent().getSerializableExtra("apk");
-            openInstallSettings();
+            if (!canInstall()) {
+                openInstallSettings();
+            } else {
+                installApk(mApk);
+                finish();
+            }
         }
 
         @RequiresApi(api = Build.VERSION_CODES.O)
         private void openInstallSettings() {
             Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivityForResult(intent, 1000);
+            startActivityForResult(intent, 1024);
         }
 
         @Override
@@ -478,8 +567,10 @@ public class SysUtils {
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
             super.onActivityResult(requestCode, resultCode, data);
             switch (requestCode) {
-                case 1000:
-                    installApk(mApk);
+                case 1024:
+                    if (canInstall()) {
+                        installApk(mApk);
+                    }
                     break;
             }
             finish();

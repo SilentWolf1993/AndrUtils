@@ -3,6 +3,7 @@ package com.yhy.andrutils;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.yhy.utils.core.ToastUtils;
 import com.yhy.utils.helper.PermissionHelper;
 import com.yhy.utils.helper.SMSCodeAutoFillHelper;
 
+import java.io.File;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -101,6 +103,8 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onGranted() {
                                 ToastUtils.shortT("已经同意发短信");
+                                SysUtils.sendSMS("1831889251", "我饿了");
+//                                SysUtils.sendMediaSMS("18313889251", "我饿了", "发送彩信", SysUtils.compatUri(new File("/sdcard/Download/test.apk")), null);
                             }
 
                             @Override
@@ -134,6 +138,18 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                         });
+            }
+        });
+
+        findViewById(R.id.tv_install).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                File file = new File("/sdcard/Download/test.apk");
+                if (file.exists()) {
+                    SysUtils.installApk(file);
+                } else {
+                    ToastUtils.shortT("apk不存在");
+                }
             }
         });
 

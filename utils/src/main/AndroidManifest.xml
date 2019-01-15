@@ -3,6 +3,7 @@
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.WRITE_SMS" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
@@ -13,7 +14,12 @@
         android:supportsRtl="true">
 
         <activity android:name=".helper.PermissionHelper$PermissionActivity" />
-        <activity android:name=".core.SysUtils$InstallSettingsActivity" />
+
+        <activity
+            android:name=".core.SysUtils$InstallSettingsActivity"
+            android:exported="true"
+            android:launchMode="standard"
+            android:theme="@style/Theme.AppCompat.Transparent" />
 
         <!--配置FileProvider-->
         <provider
