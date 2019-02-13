@@ -16,7 +16,7 @@ install {
                 artifactId config.pkg.artifactId
                 version config.pkg.version
                 packaging 'aar'
-                name project.name                           // 项目名称
+                name project.name                                   // 项目名称
                 url config.cvs.url
                 description config.pkg.desc
 
@@ -28,9 +28,9 @@ install {
                 }
                 developers {
                     developer {
-                        id config.developer.id                     // 开发者信息
-                        name config.developer.name                 // 开发者信息
-                        email config.developer.email               // 开发者信息
+                        id config.developer.id                      // 开发者信息
+                        name config.developer.name                  // 开发者信息
+                        email config.developer.email                // 开发者信息
                     }
                 }
                 scm {
@@ -65,7 +65,7 @@ javadoc {
         author true
         version true
         links 'http://docs.oracle.com/javase/8/docs/api'
-        title config.doc.title                                     // 文档标题
+        title config.doc.title                                      // 文档标题
     }
 }
 
@@ -101,7 +101,7 @@ bintray {
 
     pkg {
         repo = "maven"
-        name = config.pkg.artifactId                                   // 数据仓库依赖第二部分
+        name = config.pkg.artifactId                                // 数据仓库依赖第二部分
         userOrg = config.user.org
         desc = config.pkg.desc
         websiteUrl = config.cvs.url
