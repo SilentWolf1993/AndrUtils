@@ -552,7 +552,7 @@ public class SysUtils {
 
         @RequiresApi(api = Build.VERSION_CODES.O)
         private void openInstallSettings() {
-            Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+            Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + getApplicationId()));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivityForResult(intent, 1024);
         }

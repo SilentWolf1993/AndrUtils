@@ -34,8 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
         StatusBarUtils.darkMode(this);
 
-
-
         PermissionHelper.getInstance().permissions(Manifest.permission.READ_PHONE_STATE).request(new PermissionHelper.SimplePermissionCallback() {
             @Override
             public void onGranted() {
@@ -53,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         APIUtils.set("global.user.id", 1024);
         apiUpload = APIUtils.getByKey("sys.common.upload.avatar");
         LogUtils.i(apiUpload);
+
+        LogUtils.i(SysUtils.getApplicationId());
 
         findViewById(R.id.tv_camera).setOnClickListener(new View.OnClickListener() {
             @Override
