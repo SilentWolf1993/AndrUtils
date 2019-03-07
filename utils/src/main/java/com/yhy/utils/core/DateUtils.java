@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * author : 颜洪毅
@@ -45,7 +46,7 @@ public class DateUtils {
      * @return 时间字符串
      */
     public static String formatDateTime(long millions, String pattern) {
-        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.getDefault());
         return format.format(new Date(millions));
     }
 
@@ -67,7 +68,7 @@ public class DateUtils {
      * @return 毫秒值
      */
     public static long parseDateTime(String dateStr, String pattern) {
-        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.getDefault());
         try {
             return format.parse(dateStr).getTime();
         } catch (ParseException e) {

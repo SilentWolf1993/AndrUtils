@@ -15,7 +15,7 @@ public class RegexUtils {
     // 数字
     private final static String REG_NUMBER = "^\\d+$";
     // 手机号码
-    private final static String REG_MOBILE = "^1[3,4,5,7,8,9]\\d{9}$";
+    private final static String REG_MOBILE = "^1[3,4,5,6,7,8,9]\\d{9}$";
     // 邮箱
     private final static String REG_EMAIL = "^(\\w+)(\\.\\w+)*@(\\w{2,8}\\.){1,3}\\w{2,8}$";
     // 网址

@@ -1,14 +1,11 @@
 package com.yhy.andrutils;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.webkit.MimeTypeMap;
 
 import com.yhy.utils.core.APIUtils;
 import com.yhy.utils.core.FileUtils;
@@ -149,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 File file = new File("/sdcard/Download/test.apk");
-                ToastUtils.shortT(FileUtils.getMimeType(file));
+                ToastUtils.shortT("文件类型为：" + FileUtils.getMimeType(file));
 
                 if (file.exists()) {
                     SysUtils.installApk(file);

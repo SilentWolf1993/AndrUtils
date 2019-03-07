@@ -282,7 +282,8 @@ public class SysUtils {
      * @return 是否可安装
      */
     public static boolean canInstall() {
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.O || ctx.getPackageManager().canRequestPackageInstalls();
+        boolean a = Build.VERSION.SDK_INT < Build.VERSION_CODES.O || ctx.getPackageManager().canRequestPackageInstalls();
+        return a;
     }
 
     /**
@@ -553,7 +554,6 @@ public class SysUtils {
         @RequiresApi(api = Build.VERSION_CODES.O)
         private void openInstallSettings() {
             Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + getApplicationId()));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivityForResult(intent, 1024);
         }
 
