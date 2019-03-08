@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.yhy.utils.core.YamlUtils;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -22,5 +24,7 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("com.yhy.andrutils", appContext.getPackageName());
+
+        YamlUtils.load(appContext.getResources().getAssets().open("api-asset.yml"));
     }
 }
