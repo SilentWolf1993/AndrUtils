@@ -1,0 +1,12 @@
+host: http://www.baidu.com/api
+header: {
+  token:  token123456,
+  time: 23453245
+}
+user:
+  register: ${host}/${header.time}/user/register
+  login:  ${host}/user/login
+  param:  {key1: value1, key2: value2}
+  lists:
+    - lisi
+    - zhaoliu

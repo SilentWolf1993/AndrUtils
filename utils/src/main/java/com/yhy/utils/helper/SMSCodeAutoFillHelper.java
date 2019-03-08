@@ -100,7 +100,7 @@ public class SMSCodeAutoFillHelper {
                         break;
                     case CODE_ERROR_PARSE:
                         // 未解析成功
-                        listener.onError(CODE_ERROR_PARSE, "Could not parse sms code as expect, Perhaps you can parse by yourself.");
+                        listener.onError(CODE_ERROR_PARSE, "Could not load sms code as expect, Perhaps you can load by yourself.");
                         break;
                     case CODE_ERROR_FOUND:
                         // 未查询到短信
