@@ -50,7 +50,7 @@ publish {
     userOrg = 'yhyzgn'
     groupId = 'com.yhy.utils'
     artifactId = 'andr-utils'
-    publishVersion = '1.1.12'
+    publishVersion = '1.1.13'
     desc = 'CSome utils which often used in android development.'
     website = 'https://github.com/yhyzgn/AndrUtils'
 }

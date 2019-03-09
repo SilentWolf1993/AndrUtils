@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.yhy.utils.core.APIUtils;
+import com.yhy.utils.core.LogUtils;
 import com.yhy.utils.core.YamlUtils;
 
 import org.junit.Test;
@@ -25,6 +27,12 @@ public class ExampleInstrumentedTest {
 
         assertEquals("com.yhy.andrutils", appContext.getPackageName());
 
-        YamlUtils.load(appContext.getResources().getAssets().open("api-asset.yml"));
+//        YamlUtils.load(appContext.getResources().getAssets().open("api-asset.yml"));
+//
+//        String register = YamlUtils.getString("user.register");
+//        LogUtils.i(register);
+//        LogUtils.i(YamlUtils.getLong("header.time"));
+        LogUtils.i(APIUtils.get("user.register"));
+        LogUtils.i(APIUtils.get("user.login"));
     }
 }

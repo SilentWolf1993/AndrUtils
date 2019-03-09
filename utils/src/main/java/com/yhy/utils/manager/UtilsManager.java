@@ -17,10 +17,9 @@ import com.yhy.utils.core.SPUtils;
 import com.yhy.utils.core.SysUtils;
 import com.yhy.utils.core.ToastUtils;
 import com.yhy.utils.core.ViewUtils;
+import com.yhy.utils.core.YamlUtils;
 import com.yhy.utils.helper.PermissionHelper;
 import com.yhy.utils.helper.SMSCodeAutoFillHelper;
-
-import java.io.IOException;
 
 /**
  * author : 颜洪毅
@@ -83,6 +82,7 @@ public class UtilsManager {
         ActivityUtils.init(mApp);
         MetaUtils.init(mApp);
         PropUtils.init(mApp);
+        YamlUtils.init(mApp);
         ResUtils.init(mApp);
         SysUtils.init(mApp);
         SPUtils.init(mApp);

@@ -317,7 +317,7 @@ public class StatusBarUtils {
     public static boolean isMIUI6Later() {
         try {
             Class<?> clz = Class.forName("android.os.SystemProperties");
-            Method mtd = clz.getMethod("get", String.class);
+            Method mtd = clz.getMethod("getString", String.class);
             String val = (String) mtd.invoke(null, "ro.miui.ui.version.name");
             val = val.replaceAll("[vV]", "");
             int version = Integer.parseInt(val);

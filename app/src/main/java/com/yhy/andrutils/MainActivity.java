@@ -43,10 +43,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        String apiUpload = APIUtils.getByKey("sys.common.upload.avatar");
+        String apiUpload = APIUtils.get("sys.common.upload.avatar");
         LogUtils.i(apiUpload);
         APIUtils.set("global.user.id", 1024);
-        apiUpload = APIUtils.getByKey("sys.common.upload.avatar");
+        apiUpload = APIUtils.get("sys.common.upload.avatar");
         LogUtils.i(apiUpload);
 
         LogUtils.i(SysUtils.getApplicationId());
