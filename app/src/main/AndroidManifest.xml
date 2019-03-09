@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.yhy.andrutils">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.yhy.andrutils">
 
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-    <uses-permission android:name="android.permission.SEND_SMS"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
 
     <application
         android:name=".App"
@@ -21,21 +21,29 @@
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity android:name=".MainActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <!--配置api文件-->
+        <!--<meta-data-->
+        <!--android:name="API_ASSETS"-->
+        <!--android:value="api-asset.yml" />-->
         <meta-data
             android:name="API_ASSETS"
-            android:value="api_assets_test.properties"/>
+            android:value="api_assets_test.properties" />
 
-        <!--配置api-host-->
+        <!--
+        配置api-host
+        如果不配置该项，则需要在配置文件中每个接口上拼接api基础地址，如：${api.server}/user/login
+        若配置的话，则无需拼接，只需在这里指定host对应的key即可，如：直接配置为 /user/login
+        注意：这两个地方切勿重复配置，否则导致${api.host}重复
+        -->
         <meta-data
             android:name="API_HOST"
-            android:value="api.server"/>
+            android:value="api.server" />
     </application>
 
 </manifest>

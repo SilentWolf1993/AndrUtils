@@ -5,9 +5,11 @@ import android.content.Context;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * author : 颜洪毅
@@ -17,9 +19,22 @@ import java.util.Properties;
  * desc   : Properties工具类
  */
 public class PropUtils {
+
     @SuppressLint("StaticFieldLeak")
     private static Context ctx;
-    private static Map<Object, Properties> propMap;
+    private static final Properties PROP_PROPERTIES;
+    private static final Map<String, String> PROP_DOLLARS_MAP;
+
+    static {
+        PROP_PROPERTIES = new Properties() {
+            @Override
+            public String getProperty(String key) {
+                Object value = get(key);
+                return (value != null ? value.toString() : null);
+            }
+        };
+        PROP_DOLLARS_MAP = new LinkedHashMap<>();
+    }
 
     private PropUtils() {
         throw new UnsupportedOperationException("Can not create instance for class PropUtils.");
@@ -32,133 +47,179 @@ public class PropUtils {
      */
     public static void init(Context context) {
         ctx = context;
-        propMap = new HashMap<>();
     }
 
     /**
      * 加载properties文件
      *
-     * @param tag        标记，一般传this即可
      * @param assetsName assets目录中的properties文件
      * @throws IOException IOException
      */
-    public static void load(Object tag, String assetsName) throws IOException {
-        load(tag, ctx.getResources().getAssets().open(assetsName));
+    public static void load(String assetsName) throws IOException {
+        load(ctx.getResources().getAssets().open(assetsName));
     }
 
     /**
      * 加载properties文件
      *
-     * @param tag 标记，一般传this即可
-     * @param is  properties文件输入流
+     * @param is properties文件输入流
      * @throws IOException IOException
      */
-    public static void load(Object tag, InputStream is) throws IOException {
-        if (null == tag || null == is) {
-            throw new IllegalArgumentException("tag or is can not be null.");
+    public static void load(InputStream is) throws IOException {
+        if (null == is) {
+            throw new IllegalArgumentException("Can not found the properties file.");
         }
-
         Properties prop = new Properties();
         prop.load(is);
-        propMap.put(tag, prop);
+        PROP_PROPERTIES.putAll(prop);
+        process();
+    }
+
+    /**
+     * 解析配置文件
+     */
+    private static void process() {
+        Object value;
+        String strValue;
+        for (Map.Entry<Object, Object> et : PROP_PROPERTIES.entrySet()) {
+            value = et.getValue();
+            if (value instanceof String) {
+                strValue = (String) value;
+                if (RegexUtils.match(strValue, ".*?((\\$\\{.*?\\}).*?)+.*?")) {
+                    Pattern compile = Pattern.compile(".*?((\\$\\{.*?\\}).*?)+.*?");
+                    Matcher matcher = compile.matcher(strValue);
+                    String group;
+                    String temp;
+                    while (matcher.find()) {
+                        group = matcher.group(1);
+                        if (PROP_DOLLARS_MAP.containsKey(group)) {
+                            temp = null != PROP_DOLLARS_MAP.get(group) ? PROP_DOLLARS_MAP.get(group) : "null";
+                        } else {
+                            temp = get(group.substring(2, group.length() - 1));
+                            PROP_DOLLARS_MAP.put(group, temp);
+                        }
+                        if (null == temp) {
+                            temp = "null";
+                        }
+                        strValue = strValue.replace(group, temp);
+                        et.setValue(strValue);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 获取 Integer 类型
+     *
+     * @param key 名称
+     * @return 值
+     */
+    public static Integer getInteger(String key) {
+        return Integer.valueOf(getString(key, "0"));
+    }
+
+    /**
+     * 获取 Boolean 类型
+     *
+     * @param key 名称
+     * @return 值
+     */
+    public static Boolean getBoolean(String key) {
+        return Boolean.valueOf(getString(key, "false"));
+    }
+
+    /**
+     * 获取 Long 类型
+     *
+     * @param key 名称
+     * @return 值
+     */
+    public static Long getLong(String key) {
+        return Long.valueOf(getString(key, "0"));
+    }
+
+    /**
+     * 获取 Float 类型
+     *
+     * @param key 名称
+     * @return 值
+     */
+    public static Float getFloat(String key) {
+        return Float.valueOf(getString(key, "0"));
+    }
+
+    /**
+     * 获取 Double 类型
+     *
+     * @param key 名称
+     * @return 值
+     */
+    public static Double getDouble(String key) {
+        return Double.valueOf(getString(key, "0"));
+    }
+
+    /**
+     * 获取 String 类型
+     *
+     * @param key 名称
+     * @return 值
+     */
+    public static String getString(String key) {
+        return PROP_PROPERTIES.getProperty(key);
+    }
+
+    /**
+     * 获取 String 类型
+     *
+     * @param key 名称
+     * @return 值
+     */
+    public static String getString(String key, String defValue) {
+        return PROP_PROPERTIES.getProperty(key, defValue);
     }
 
     /**
      * 获取属性值
      *
-     * @param tag 标记，一般传this即可
      * @param key 属性名称
      * @return 属性值
      */
-    public static String get(Object tag, String key) {
-        return get(tag, key, "");
+    public static String get(String key) {
+        return get(key, "");
     }
 
     /**
      * 获取属性值
      *
-     * @param tag      标记，一般传this即可
      * @param key      属性名称
      * @param defValue 默认值
      * @return 属性值
      */
-    public static String get(Object tag, String key, String defValue) {
-        if (propMap.containsKey(tag)) {
-            return propMap.get(tag).getProperty(key, defValue);
-        }
-        return null;
+    public static String get(String key, String defValue) {
+        return PROP_PROPERTIES.getProperty(key, defValue);
+    }
+
+    /**
+     * 获取所有配置信息
+     *
+     * @return 所有配置信息
+     */
+    public static Properties get() {
+        return PROP_PROPERTIES;
     }
 
     /**
      * 设置属性值
      *
-     * @param tag   标记，一般传this即可
      * @param key   属性名称
      * @param value 属性值
      */
-    public static void set(Object tag, String key, String value) {
-        if (!propMap.containsKey(tag)) {
-            propMap.put(tag, new Properties());
-        }
+    public static void set(String key, Object value) {
         if (null == value || "null".equals(value)) {
-            propMap.get(tag).remove(key);
+            PROP_PROPERTIES.remove(key);
             return;
         }
-        propMap.get(tag).setProperty(key, value);
-    }
-
-    /**
-     * 设置属性值
-     *
-     * @param tag   标记，一般传this即可
-     * @param key   属性名称
-     * @param value 属性值
-     */
-    public static void set(Object tag, String key, int value) {
-        set(tag, key, String.valueOf(value));
-    }
-
-    /**
-     * 设置属性值
-     *
-     * @param tag   标记，一般传this即可
-     * @param key   属性名称
-     * @param value 属性值
-     */
-    public static void set(Object tag, String key, long value) {
-        set(tag, key, String.valueOf(value));
-    }
-
-    /**
-     * 设置属性值
-     *
-     * @param tag   标记，一般传this即可
-     * @param key   属性名称
-     * @param value 属性值
-     */
-    public static void set(Object tag, String key, float value) {
-        set(tag, key, String.valueOf(value));
-    }
-
-    /**
-     * 设置属性值
-     *
-     * @param tag   标记，一般传this即可
-     * @param key   属性名称
-     * @param value 属性值
-     */
-    public static void set(Object tag, String key, double value) {
-        set(tag, key, String.valueOf(value));
-    }
-
-    /**
-     * 设置属性值
-     *
-     * @param tag   标记，一般传this即可
-     * @param key   属性名称
-     * @param value 属性值
-     */
-    public static void set(Object tag, String key, Object value) {
-        set(tag, key, String.valueOf(value));
+        PROP_PROPERTIES.setProperty(key, value.toString());
     }
 }
