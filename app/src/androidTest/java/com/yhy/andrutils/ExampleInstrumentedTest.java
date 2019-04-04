@@ -1,12 +1,11 @@
 package com.yhy.andrutils;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
+import androidx.test.InstrumentationRegistry;
+import androidx.test.runner.AndroidJUnit4;
 
 import com.yhy.utils.core.APIUtils;
 import com.yhy.utils.core.LogUtils;
-import com.yhy.utils.core.YamlUtils;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -10,7 +10,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -34,6 +33,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+
+import androidx.annotation.NonNull;
 
 /**
  * author : 颜洪毅
@@ -472,7 +473,7 @@ public class CacheUtils {
      * @param key          键
      * @param creator      建造器
      * @param defaultValue 默认值
-     * @param <T>     具体的类型
+     * @param <T>          具体的类型
      * @return 存在且没过期返回对应值，否则返回默认值{@code defaultValue}
      */
     public <T> T getParcelable(@NonNull String key, @NonNull Parcelable.Creator<T> creator, T defaultValue) {

@@ -9,15 +9,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.annotation.StringDef;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.WindowManager;
+
+import com.yhy.alang.promise.Promise;
+import com.yhy.alang.promise.Rejector;
+import com.yhy.alang.promise.Resolver;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -26,6 +24,14 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.annotation.StringDef;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
 
 /**
  * author  : 颜洪毅
@@ -47,6 +53,8 @@ public class PermissionHelper {
     private List<String> mPermissionsDeniedForever;
     private SimplePermissionCallback mSimpleCallback;
     private PermissionCallback mCallback;
+    private Resolver<List<String>> mResolver;
+    private Rejector<List<String>> mRejector;
 
     /**
      * 获取单例实例
@@ -163,6 +171,21 @@ public class PermissionHelper {
 
     /**
      * 请求授权
+     * <p>
+     * Promise方式
+     *
+     * @return 请求授权的Promise对象
+     */
+    public Promise<List<String>, List<String>> request() {
+        return Promise.get((resolver, rejector) -> {
+            mResolver = resolver;
+            mRejector = rejector;
+            request(null, null);
+        });
+    }
+
+    /**
+     * 请求授权
      *
      * @param simpleCallback 简约回调
      * @param callback       完整回调
@@ -207,6 +230,7 @@ public class PermissionHelper {
      * 统一回调处理
      */
     private void callback() {
+        // 已授权
         if (null != mPermissionsGranted && !mPermissionsGranted.isEmpty()) {
             if (null != mSimpleCallback) {
                 mSimpleCallback.onGranted();
@@ -214,13 +238,20 @@ public class PermissionHelper {
             if (null != mCallback) {
                 mCallback.onGranted(mPermissionsGranted);
             }
+            if (null != mResolver) {
+                mResolver.resolve(mPermissionsGranted);
+            }
         }
+        // 未授权
         if (null != mPermissionsDenied && !mPermissionsDenied.isEmpty() || null != mPermissionsDeniedForever && !mPermissionsDeniedForever.isEmpty()) {
             if (null != mSimpleCallback) {
                 mSimpleCallback.onDenied();
             }
             if (null != mCallback) {
                 mCallback.onDenied(mPermissionsDenied, mPermissionsDeniedForever);
+            }
+            if (null != mRejector) {
+                mRejector.reject(mPermissionsGranted);
             }
         }
     }
@@ -288,7 +319,7 @@ public class PermissionHelper {
          *
          * @param granted 具体被授权的权限
          */
-        @SuppressLint("MissingPermission")
+        @PermissionChecker.PermissionResult
         void onGranted(List<String> granted);
 
         /**
@@ -297,6 +328,7 @@ public class PermissionHelper {
          * @param denied  被拒绝的权限
          * @param forever 被永久拒绝的权限
          */
+        @PermissionChecker.PermissionResult
         void onDenied(List<String> denied, List<String> forever);
     }
 

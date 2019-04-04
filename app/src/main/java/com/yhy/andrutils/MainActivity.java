@@ -2,7 +2,6 @@ package com.yhy.andrutils;
 
 import android.Manifest;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -19,6 +18,8 @@ import com.yhy.utils.helper.SMSCodeAutoFillHelper;
 import java.io.File;
 import java.util.List;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -31,17 +32,14 @@ public class MainActivity extends AppCompatActivity {
 
         StatusBarUtils.darkMode(this);
 
-        PermissionHelper.getInstance().permissions(Manifest.permission.READ_PHONE_STATE).request(new PermissionHelper.SimplePermissionCallback() {
-            @Override
-            public void onGranted() {
-                LogUtils.i("授权了READ_PHONE_STATE权限，获取到设备ID为：" + SysUtils.getDeviceId());
-            }
-
-            @Override
-            public void onDenied() {
-                LogUtils.i("拒绝了READ_PHONE_STATE权限，获取到设备ID为：" + SysUtils.getDeviceId());
-            }
-        });
+        PermissionHelper.getInstance()
+                .permissions(Manifest.permission.READ_PHONE_STATE)
+                .request()
+                .then(data ->
+                        LogUtils.i("授权了READ_PHONE_STATE权限，获取到设备ID为：" + SysUtils.getDeviceId()))
+                .caught(error ->
+                        LogUtils.i("拒绝了READ_PHONE_STATE权限，获取到设备ID为：" + SysUtils.getDeviceId()))
+                .execute();
 
         String apiUpload = APIUtils.get("sys.common.upload.avatar");
         LogUtils.i(apiUpload);
@@ -75,25 +73,22 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 PermissionHelper.getInstance()
                         .permissions(Manifest.permission.CALL_PHONE)
-                        .request(new PermissionHelper.SimplePermissionCallback() {
-                            @Override
-                            public void onGranted() {
-                                ToastUtils.shortT("已经同意打电话");
-                            }
-
-                            @Override
-                            public void onDenied() {
-                                ToastUtils.shortT("拒绝了打电话");
-                            }
-                        });
+                        .request()
+                        .then(data -> {
+                            ToastUtils.shortT("已经同意打电话");
+//                            SysUtils.callPhone("18313889251");
+                        })
+                        .caught(error ->
+                                ToastUtils.shortT("拒绝了打电话"))
+                        .execute();
             }
         });
-        findViewById(R.id.tv_call).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SysUtils.callPhone("18313889251");
-            }
-        });
+//        findViewById(R.id.tv_call).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                SysUtils.callPhone("18313889251");
+//            }
+//        });
 
         findViewById(R.id.tv_sms).setOnClickListener(new View.OnClickListener() {
             @Override

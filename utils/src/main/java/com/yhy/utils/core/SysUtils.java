@@ -2,6 +2,7 @@ package com.yhy.utils.core;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.app.Instrumentation;
 import android.content.ComponentName;
@@ -18,10 +19,6 @@ import android.os.Bundle;
 import android.os.Process;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.MotionEvent;
@@ -34,6 +31,11 @@ import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 /**
  * author : 颜洪毅
@@ -281,9 +283,9 @@ public class SysUtils {
      *
      * @return 是否可安装
      */
+    @TargetApi(Build.VERSION_CODES.O)
     public static boolean canInstall() {
-        boolean a = Build.VERSION.SDK_INT < Build.VERSION_CODES.O || ctx.getPackageManager().canRequestPackageInstalls();
-        return a;
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.O || ctx.getPackageManager().canRequestPackageInstalls();
     }
 
     /**

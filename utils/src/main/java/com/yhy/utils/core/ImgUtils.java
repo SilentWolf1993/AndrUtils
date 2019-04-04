@@ -1,8 +1,6 @@
 package com.yhy.utils.core;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.support.annotation.IdRes;
 import android.widget.ImageView;
 
 /**
