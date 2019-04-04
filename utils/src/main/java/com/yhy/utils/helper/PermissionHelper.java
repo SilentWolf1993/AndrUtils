@@ -301,7 +301,6 @@ public class PermissionHelper {
         /**
          * 已经授权
          */
-        @SuppressLint("MissingPermission")
         void onGranted();
 
         /**
@@ -319,7 +318,6 @@ public class PermissionHelper {
          *
          * @param granted 具体被授权的权限
          */
-        @PermissionChecker.PermissionResult
         void onGranted(List<String> granted);
 
         /**
@@ -328,7 +326,6 @@ public class PermissionHelper {
          * @param denied  被拒绝的权限
          * @param forever 被永久拒绝的权限
          */
-        @PermissionChecker.PermissionResult
         void onDenied(List<String> denied, List<String> forever);
     }
 
