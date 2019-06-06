@@ -29,11 +29,82 @@ public class DateUtils {
     }
 
     /**
+     * 格式化日期
+     *
+     * @param date 日期对象
+     * @return 格式化字符串
+     */
+    public static String format(Date date) {
+        return format(date, FORMAT_ALL);
+    }
+
+    /**
+     * 格式化日期
+     *
+     * @param date    日期对象
+     * @param pattern 格式
+     * @return 格式化字符串
+     */
+    public static String format(Date date, String pattern) {
+        SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.getDefault());
+        return format.format(date);
+    }
+
+    /**
      * 以默认格式格式化时间
      *
      * @param millions 毫秒数
      * @return 时间字符串
      */
+    public static String format(long millions) {
+        return format(millions, FORMAT_ALL);
+    }
+
+    /**
+     * 自定义格式化时间
+     *
+     * @param millions 毫秒数
+     * @param pattern  格式
+     * @return 时间字符串
+     */
+    public static String format(long millions, String pattern) {
+        return format(new Date(millions), pattern);
+    }
+
+    /**
+     * 解析字符串类型的日期
+     *
+     * @param date 日期字符串
+     * @return 毫秒值
+     */
+    public static Date parse(String date) {
+        return parse(date, FORMAT_ALL);
+    }
+
+    /**
+     * 解析字符串类型的日期
+     *
+     * @param date    日期字符串
+     * @param pattern 格式
+     * @return 毫秒值
+     */
+    public static Date parse(String date, String pattern) {
+        SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.getDefault());
+        try {
+            return format.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 以默认格式格式化时间
+     *
+     * @param millions 毫秒数
+     * @return 时间字符串
+     */
+    @Deprecated
     public static String formatDateTime(long millions) {
         return formatDateTime(millions, FORMAT_ALL);
     }
@@ -45,6 +116,7 @@ public class DateUtils {
      * @param pattern  格式
      * @return 时间字符串
      */
+    @Deprecated
     public static String formatDateTime(long millions, String pattern) {
         SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.getDefault());
         return format.format(new Date(millions));
@@ -56,6 +128,7 @@ public class DateUtils {
      * @param dateStr 日期字符串
      * @return 毫秒值
      */
+    @Deprecated
     public static long parseDateTime(String dateStr) {
         return parseDateTime(dateStr, FORMAT_ALL);
     }
@@ -67,6 +140,7 @@ public class DateUtils {
      * @param pattern 格式
      * @return 毫秒值
      */
+    @Deprecated
     public static long parseDateTime(String dateStr, String pattern) {
         SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.getDefault());
         try {
@@ -84,6 +158,7 @@ public class DateUtils {
      * @param dateB 第二个时间日期
      * @return 是否是同一天
      */
+    @Deprecated
     public static boolean isSameDay(Date dateA, Date dateB) {
         Calendar calA = Calendar.getInstance();
         calA.setTime(dateA);
