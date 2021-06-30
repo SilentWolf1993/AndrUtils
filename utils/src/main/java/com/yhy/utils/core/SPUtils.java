@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
  * version: 1.0.0
  * desc   : PS 工具类
  */
-public class SPUtils {
+public abstract class SPUtils {
 
     private static SharedPreferences sp;
 

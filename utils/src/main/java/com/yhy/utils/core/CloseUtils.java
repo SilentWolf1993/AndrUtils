@@ -10,7 +10,7 @@ import java.io.IOException;
  * version: 1.0.0
  * desc   : 关闭IO工具类
  */
-public class CloseUtils {
+public abstract class CloseUtils {
     private CloseUtils() {
         throw new UnsupportedOperationException("Can not create instance for class CloseUtils");
     }

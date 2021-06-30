@@ -10,7 +10,7 @@ import android.widget.ImageView;
  * version: 1.0.0
  * desc   : 图片工具类
  */
-public class ImgUtils {
+public abstract class ImgUtils {
 
     private static ImgLoader imgLoader;
 

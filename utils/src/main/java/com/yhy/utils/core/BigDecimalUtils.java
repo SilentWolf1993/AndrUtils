@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  * version: 1.0.0
  * desc   : 精确运算工具类
  */
-public class BigDecimalUtils {
+public abstract class BigDecimalUtils {
 
     private BigDecimalUtils() {
         throw new UnsupportedOperationException("Can not instantiate class BigDecimalUtils.");

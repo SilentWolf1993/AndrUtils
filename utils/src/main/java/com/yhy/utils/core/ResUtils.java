@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import androidx.annotation.ArrayRes;
@@ -20,7 +21,7 @@ import androidx.annotation.StringRes;
  * version: 1.0.0
  * desc   : 资源工具类
  */
-public class ResUtils {
+public abstract class ResUtils {
     @SuppressLint("StaticFieldLeak")
     private static Context mCtx;
 
@@ -78,11 +79,7 @@ public class ResUtils {
      */
     public static List<String> getStringList(@ArrayRes int resId) {
         //Arrays.asList() 转换后的List不可改变大小，有些地方不适用，所以使用下列方法转换为List
-        List<String> resultList = new ArrayList<>();
-        for (String s : getStringArr(resId)) {
-            resultList.add(s);
-        }
-        return resultList;
+        return new ArrayList<>(Arrays.asList(getStringArr(resId)));
     }
 
     /**
@@ -102,6 +99,6 @@ public class ResUtils {
      * @return 获取到的图片
      */
     public static Drawable getDrawable(@DrawableRes int resId) {
-        return mCtx.getResources().getDrawable(resId);
+        return mCtx.getResources().getDrawable(resId, null);
     }
 }

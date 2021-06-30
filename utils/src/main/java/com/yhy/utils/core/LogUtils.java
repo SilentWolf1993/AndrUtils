@@ -47,7 +47,7 @@ import androidx.annotation.IntRange;
  * version: 1.0.0
  * desc   : 日志工具
  */
-public class LogUtils {
+public abstract class LogUtils {
 
     public static final int V = Log.VERBOSE;
     public static final int D = Log.DEBUG;

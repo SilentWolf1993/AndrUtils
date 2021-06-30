@@ -15,7 +15,7 @@ import java.util.List;
  * version: 1.0.0
  * desc   : QQ工具类
  */
-public class QQUtils {
+public abstract class QQUtils {
 
     private QQUtils() {
         throw new UnsupportedOperationException("Can not instantiate utils class.");

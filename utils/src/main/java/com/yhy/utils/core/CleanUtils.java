@@ -13,7 +13,7 @@ import java.io.File;
  * version: 1.0.0
  * desc   : 清理工具类
  */
-public class CleanUtils {
+public abstract class CleanUtils {
     @SuppressLint("StaticFieldLeak")
     private static Context ctx;
 

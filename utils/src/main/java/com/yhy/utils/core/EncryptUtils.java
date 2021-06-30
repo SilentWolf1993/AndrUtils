@@ -22,7 +22,7 @@ import javax.crypto.spec.SecretKeySpec;
  * version: 1.0.0
  * desc   : 加密工具类
  */
-public class EncryptUtils {
+public abstract class EncryptUtils {
 
     private EncryptUtils() {
         throw new UnsupportedOperationException("Can not instantiate utils class.");

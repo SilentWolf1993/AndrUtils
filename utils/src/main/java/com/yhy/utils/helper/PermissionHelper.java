@@ -13,9 +13,16 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.WindowManager;
 
-import com.yhy.alang.promise.Promise;
-import com.yhy.alang.promise.Rejector;
-import com.yhy.alang.promise.Resolver;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.annotation.StringDef;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
+import com.yhy.utils.lang.Promise;
+import com.yhy.utils.lang.Rejector;
+import com.yhy.utils.lang.Resolver;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -24,14 +31,6 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.annotation.StringDef;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.PermissionChecker;
 
 /**
  * author  : 颜洪毅
@@ -177,7 +176,7 @@ public class PermissionHelper {
      * @return 请求授权的Promise对象
      */
     public Promise<List<String>, List<String>> request() {
-        return Promise.get((resolver, rejector) -> {
+        return new Promise<>((resolver, rejector) -> {
             mResolver = resolver;
             mRejector = rejector;
             request(null, null);
@@ -197,22 +196,17 @@ public class PermissionHelper {
         mPermissionsRequest = new ArrayList<>();
         mPermissionsGranted = new ArrayList<>();
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            mPermissionsGranted.addAll(mPermissions);
+        for (String permission : mPermissions) {
+            if (isGranted(permission)) {
+                mPermissionsGranted.add(permission);
+            } else {
+                mPermissionsRequest.add(permission);
+            }
+        }
+        if (mPermissionsRequest.isEmpty()) {
             callback();
         } else {
-            for (String permission : mPermissions) {
-                if (isGranted(permission)) {
-                    mPermissionsGranted.add(permission);
-                } else {
-                    mPermissionsRequest.add(permission);
-                }
-            }
-            if (mPermissionsRequest.isEmpty()) {
-                callback();
-            } else {
-                toGrant();
-            }
+            toGrant();
         }
     }
 
@@ -382,6 +376,7 @@ public class PermissionHelper {
          */
         @Override
         public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
             if (requestCode == 1000) {
                 instance.onRequestPermissionsResult(this);
             }

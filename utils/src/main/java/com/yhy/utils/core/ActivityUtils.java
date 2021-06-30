@@ -28,7 +28,7 @@ import androidx.core.util.Pair;
  * version: 1.0.0
  * desc   : Activity工具类
  */
-public class ActivityUtils {
+public abstract class ActivityUtils {
     // 当前Application
     @SuppressLint("StaticFieldLeak")
     private static Application app;

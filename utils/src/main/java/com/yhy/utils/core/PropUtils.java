@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * version: 1.0.0
  * desc   : Properties工具类
  */
-public class PropUtils {
+public abstract class PropUtils {
 
     @SuppressLint("StaticFieldLeak")
     private static Context ctx;

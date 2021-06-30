@@ -11,6 +11,8 @@ import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -34,8 +36,6 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import androidx.annotation.NonNull;
-
 /**
  * author : 颜洪毅
  * e-mail : yhyzgn@gmail.com
@@ -55,8 +55,8 @@ public class CacheUtils {
     @SuppressLint("StaticFieldLeak")
     private static Context ctx;
 
-    private static Map<String, CacheUtils> sCacheMap = new HashMap<>();
-    private CacheManager mCacheManager;
+    private static final Map<String, CacheUtils> sCacheMap = new HashMap<>();
+    private final CacheManager mCacheManager;
 
     /**
      * 初始化，在Application中

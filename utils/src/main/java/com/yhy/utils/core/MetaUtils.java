@@ -13,7 +13,7 @@ import android.os.Bundle;
  * version: 1.0.0
  * desc   : meta参数工具类
  */
-public class MetaUtils {
+public abstract class MetaUtils {
     @SuppressLint("StaticFieldLeak")
     private static Context ctx;
 

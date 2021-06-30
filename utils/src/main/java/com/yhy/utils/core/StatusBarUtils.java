@@ -29,7 +29,7 @@ import androidx.annotation.RequiresApi;
  * desc   : 状态栏与导航栏工具类
  */
 @SuppressLint("PrivateApi")
-public class StatusBarUtils {
+public abstract class StatusBarUtils {
     public static int DEFAULT_COLOR = Color.TRANSPARENT;
     // Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? 0.2f : 0.3f;
     public static float DEFAULT_ALPHA = 0;

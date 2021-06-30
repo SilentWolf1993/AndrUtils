@@ -19,7 +19,7 @@ import java.math.BigDecimal;
  * desc   : 文件工具类
  */
 @SuppressWarnings("ResultOfMethodCallIgnored")
-public class FileUtils {
+public abstract class FileUtils {
     @SuppressLint("StaticFieldLeak")
     private static Context mCtx;
 

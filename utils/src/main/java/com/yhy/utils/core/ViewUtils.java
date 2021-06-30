@@ -18,7 +18,7 @@ import java.io.ByteArrayOutputStream;
  * version: 1.0.0
  * desc   : View工具类
  */
-public class ViewUtils {
+public abstract class ViewUtils {
     @SuppressLint("StaticFieldLeak")
     private static Context context;
 

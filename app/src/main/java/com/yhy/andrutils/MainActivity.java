@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.yhy.utils.core.APIUtils;
 import com.yhy.utils.core.FileUtils;
 import com.yhy.utils.core.LogUtils;
@@ -17,8 +19,6 @@ import com.yhy.utils.helper.SMSCodeAutoFillHelper;
 
 import java.io.File;
 import java.util.List;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,8 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 .then(data ->
                         LogUtils.i("授权了READ_PHONE_STATE权限，获取到设备ID为：" + SysUtils.getDeviceId()))
                 .caught(error ->
-                        LogUtils.i("拒绝了READ_PHONE_STATE权限，获取到设备ID为：" + SysUtils.getDeviceId()))
-                .execute();
+                        LogUtils.i("拒绝了READ_PHONE_STATE权限，获取到设备ID为：" + SysUtils.getDeviceId()));
 
         String apiUpload = APIUtils.get("sys.common.upload.avatar");
         LogUtils.i(apiUpload);
@@ -79,8 +78,7 @@ public class MainActivity extends AppCompatActivity {
 //                            SysUtils.callPhone("18313889251");
                         })
                         .caught(error ->
-                                ToastUtils.shortT("拒绝了打电话"))
-                        .execute();
+                                ToastUtils.shortT("拒绝了打电话"));
             }
         });
 //        findViewById(R.id.tv_call).setOnClickListener(new View.OnClickListener() {

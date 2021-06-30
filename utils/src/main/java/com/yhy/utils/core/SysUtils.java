@@ -44,7 +44,7 @@ import androidx.core.app.ActivityCompat;
  * version: 1.0.0
  * desc   : 系统工具类
  */
-public class SysUtils {
+public abstract class SysUtils {
     @SuppressLint("StaticFieldLeak")
     private static Context ctx;
 

@@ -14,7 +14,7 @@ import java.util.Properties;
  * version: 1.0.0
  * desc   : 接口工具类
  */
-public class APIUtils {
+public abstract class APIUtils {
     private final static String DEF_API_ASSETS_NAME = "api-assets.properties";
     private static final Properties PROPERTIES;
     @SuppressLint("StaticFieldLeak")

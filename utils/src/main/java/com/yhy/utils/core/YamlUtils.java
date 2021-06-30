@@ -3,6 +3,8 @@ package com.yhy.utils.core;
 import android.annotation.SuppressLint;
 import android.content.Context;
 
+import androidx.annotation.Nullable;
+
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.reader.UnicodeReader;
@@ -18,8 +20,6 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import androidx.annotation.Nullable;
-
 /**
  * author : 颜洪毅
  * e-mail : yhyzgn@gmail.com
@@ -27,7 +27,7 @@ import androidx.annotation.Nullable;
  * version: 1.0.0
  * desc   : Yaml 读取工具
  */
-public class YamlUtils {
+public abstract class YamlUtils {
     @SuppressLint("StaticFieldLeak")
     private static Context ctx;
     private static final Properties YAML_PROPERTIES;

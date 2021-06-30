@@ -11,7 +11,7 @@ import android.widget.Toast;
  * version: 1.0.0
  * desc   : Toast工具类
  */
-public class ToastUtils {
+public abstract class ToastUtils {
     @SuppressLint("StaticFieldLeak")
     private static Context ctx;
     private static Toast toast;

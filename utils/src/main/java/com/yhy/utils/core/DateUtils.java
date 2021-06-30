@@ -13,7 +13,7 @@ import java.util.Locale;
  * version: 1.0.0
  * desc   : 日期时间工具类
  */
-public class DateUtils {
+public abstract class DateUtils {
     public static final String FORMAT_ALL = "yyyy年MM月dd日 HH:mm:ss";
     public static final String FORMAT_DATE = "yyyy年MM月dd日";
     public static final String FORMAT_TIME = "HH:mm:ss";

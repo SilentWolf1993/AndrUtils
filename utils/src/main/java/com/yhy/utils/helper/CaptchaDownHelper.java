@@ -14,7 +14,7 @@ import java.util.TimerTask;
  */
 public class CaptchaDownHelper {
     // 构造器
-    private Builder mBuilder;
+    private final Builder mBuilder;
 
     /**
      * 构造方法
@@ -38,20 +38,12 @@ public class CaptchaDownHelper {
                     return;
                 }
                 if (mBuilder.mSeconds > 1) {
-                    mBuilder.mView.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mBuilder.mView.setText(mBuilder.mResendText + "（" + (--mBuilder.mSeconds) + "）");
-                        }
-                    });
+                    mBuilder.mView.post(() -> mBuilder.mView.setText(mBuilder.mResendText + "（" + (--mBuilder.mSeconds) + "）"));
                     return;
                 }
-                mBuilder.mView.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        mBuilder.mView.setText(mBuilder.mResendText);
-                        mBuilder.mView.setEnabled(true);
-                    }
+                mBuilder.mView.post(() -> {
+                    mBuilder.mView.setText(mBuilder.mResendText);
+                    mBuilder.mView.setEnabled(true);
                 });
                 cancel();
             }
@@ -107,7 +99,7 @@ public class CaptchaDownHelper {
      */
     public static class Builder {
         // 计时器
-        private Timer mTimer;
+        private final Timer mTimer;
         // 倒计时总秒数
         private int mSeconds;
         // 发送验证码按钮
